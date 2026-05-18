@@ -11,7 +11,7 @@ naming:
     texture: T_
   suffixes:
     static_mesh:
-    skeletal_mesh: _SomeSuffix_Skeletal
+    skeletal_mesh:
     base_color: _BC
     metalness: _M
     normal: _N
@@ -20,7 +20,7 @@ textures:
   allowed_formats:
   - .png
   - .tga
-  - .tiff
+  - .fbx
   max_file_size_mb: 50
   max_resolution: 2048
   require_power_of_two: true
