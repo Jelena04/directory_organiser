@@ -1,12 +1,18 @@
-from PySide6.QtWidgets import QMainWindow, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QProgressBar, QFrame, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QFileDialog
+from PySide6.QtWidgets import QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QProgressBar, QFrame, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QFileDialog
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon
+from scanner_func import Scanner
 
 class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.scanner = Scanner()
         self.setWindowTitle("Directory Scanner")
+
+        self.directory_to_scan = None
+        self.config_file = None
+        self.table = None
 
         self.draw_interface()
 
@@ -43,6 +49,7 @@ class MainWindow(QMainWindow):
         reload_btn = QPushButton()
         reload_btn.setIcon(QIcon("reload_icon.png"))
         reload_btn.setFixedWidth(50)
+        reload_btn.clicked.connect(self.reload_config)
 
         config_row.addWidget(label_config)
         config_row.addWidget(self.config_file)
@@ -52,7 +59,16 @@ class MainWindow(QMainWindow):
 
         # scan button
         scan_btn = QPushButton("Scan")
+        scan_btn.clicked.connect(self.scan_executed)
         main_layout.addWidget(scan_btn)
+
+        # progress bar
+        # self.progress_bar = QProgressBar()
+        # self.progress_bar.setMinimum(0)
+        # self.scanner.scan_started.connect(self.progress_bar.setMaximum)
+        # self.scanner.progress_updated.connect(self.progress_bar.setValue)
+        # self.progress_bar.hide()
+        # main_layout.addWidget(self.progress_bar)
 
         # separator
         separator = QFrame()
@@ -72,15 +88,9 @@ class MainWindow(QMainWindow):
         self.table.setHorizontalHeaderLabels(["✔", "File", "Issue", "Info"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-
-        filename = "rock_diffuse.png"
-        issue = "Missing prefix"
-        info = "rename to → T_rock_diffuse.png"
-        self.insert_issue_row(filename, issue, info)
+        self.table.horizontalHeader().sectionClicked.connect(self.on_header_clicked)
 
         main_layout.addWidget(self.table)
-
-        self.table.horizontalHeader().sectionClicked.connect(self.on_header_clicked)
 
         # bottom btns
         btns_row = QHBoxLayout()
@@ -131,5 +141,27 @@ class MainWindow(QMainWindow):
     def pick_config_file(self):
         config_file = QFileDialog().getOpenFileName()
         self.config_file.setText(config_file[0])
+        self.scanner.load_config(config_file[0])
+
+    def reload_config(self):
+        error = self.scanner.load_config(self.config_file.text())
+        if error:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Icon.Critical)
+            msg.setWindowTitle("Error loading config")
+            msg.setText(error)
+            msg.exec()
+
+    def scan_executed(self):
 
 
+        result = self.scanner.scan(self.directory_to_scan.text())
+        if type(result) == str:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Icon.Critical)
+            msg.setWindowTitle("Error scanning directory")
+            msg.setText(result)
+            msg.exec()
+        else:
+            for issue in result:
+                self.insert_issue_row(issue.filename, issue.issue, issue.info)

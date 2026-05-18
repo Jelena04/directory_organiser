@@ -1,2 +1,71 @@
+import yaml
+import os
+from PySide6.QtCore import QObject, Signal
 
 class Scanner():
+
+    # progress_updated = Signal(int)  # emits the current count
+    # scan_started = Signal(int)  # emits the total file count
+
+    def __init__(self):
+        # super().__init__()
+        self.config = None
+        self.config_path = None
+
+    # {'folders': {'M_': '/Materials', 'SKM_': '/Meshes/Skeletal', 'SM_': '/Meshes', 'T_': '/Textures'},
+    # 'naming': {'prefixes': {'material': 'M_', 'skeletal_mesh': 'SK_', 'static_mesh': 'SM_', 'texture': 'T_'},
+    # 'suffixes': {'static_mesh': None, 'skeletal_mesh': None, 'base_color': '_BC', 'metalness': '_M', 'normal': '_N',
+    # 'roughness': '_R'}}, 'textures': {'allowed_formats': ['.png', '.tga', '.fbx'], 'max_file_size_mb': 50,
+    # 'max_resolution': 2048, 'require_power_of_two': True}}
+    def load_config(self, config_filepath):
+        if config_filepath == "":
+            return "Please enter a config file path"
+        if not os.path.exists(config_filepath):
+            return "Given config file path doesn't exist"
+
+        try:
+            with open(config_filepath, "r") as file:
+                self.config = yaml.safe_load(file)
+                self.config_path = config_filepath
+            return None
+        except Exception as e:
+            return str(e)
+
+    def scan(self, directory):
+        if directory == "":
+            return "Please enter a directory to scan"
+        if not os.path.exists(directory):
+            return "Given directory to scan doesn't exist"
+
+        if self.config_path is None:
+            return "Please enter a config file path"
+        if not os.path.exists(self.config_path):
+            return "Given config file path doesn't exist"
+
+        issues = []
+        allowed_formats = self.config["allowed_formats"]
+        for root, dirs, files in os.walk(directory):
+            self.scan_started.emit(len(files))
+            # count = 0
+            for file in files:
+
+                basename, extension = os.path.splitext(file)
+                if extension not in allowed_formats:
+                    new_issue = Issue(file,
+                                      os.path.join(root, file),
+                                      "wrong_format",
+                                      f"{extension} not allowed")
+                    issues.append(new_issue)
+
+                # count += 1
+                # self.progress_updated.emit(count)
+
+        return issues
+
+class Issue:
+
+    def __init__(self, filename, filepath, issue, info):
+        self.filename = filename
+        self.filepath = filepath
+        self.issue = issue
+        self.info = info

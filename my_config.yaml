@@ -17,10 +17,12 @@ naming:
     normal: _N
     roughness: _R
 textures:
-  allowed_formats:
-  - .png
-  - .tga
-  - .fbx
   max_file_size_mb: 50
   max_resolution: 2048
   require_power_of_two: true
+allowed_formats:
+  - .png
+  - .tga
+  - .fbx
+  - .abc
+  - .wav
