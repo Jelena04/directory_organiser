@@ -17,6 +17,9 @@ class MainWindow(QMainWindow):
         self.table = None
 
         self.draw_interface()
+        self.restore_ui()
+
+        self.issues = []
 
     def draw_interface(self):
         main_container = QWidget()
@@ -28,7 +31,7 @@ class MainWindow(QMainWindow):
 
         label_to_scan = QLabel("Directory to scan")
         label_to_scan.setFixedWidth(100)
-        self.directory_to_scan = QLineEdit(text=r"C:\Users\jelen\Documents\Howest - DAE\second_year_part_2\portfolio\exam_project\B_TestDirectory")
+        self.directory_to_scan = QLineEdit()
         self.directory_to_scan.setFixedWidth(300)
         browse_button = QPushButton("Browse")
         browse_button.clicked.connect(self.pick_scan_directory)
@@ -44,7 +47,7 @@ class MainWindow(QMainWindow):
 
         label_config = QLabel("Config file")
         label_config.setFixedWidth(100)
-        self.config_file = QLineEdit(text=r"C:\Users\jelen\Documents\Howest - DAE\second_year_part_2\portfolio\exam_project\B_DirectoryOrganiser\my_config.yaml")
+        self.config_file = QLineEdit()
         self.config_file.setFixedWidth(300)
         browse_button_config = QPushButton("Browse")
         browse_button_config.clicked.connect(self.pick_config_file)
@@ -155,8 +158,6 @@ class MainWindow(QMainWindow):
             msg.exec()
 
     def scan_executed(self):
-
-
         result = self.scanner.scan(self.directory_to_scan.text())
         if type(result) == str:
             msg = QMessageBox()
@@ -165,5 +166,25 @@ class MainWindow(QMainWindow):
             msg.setText(result)
             msg.exec()
         else:
+            self.issues = result
             for issue in result:
                 self.insert_issue_row(issue.filename, issue.issue, issue.info)
+
+    def restore_ui(self):
+        state = self.scanner.load_ui()
+        if not state:
+            return
+        self.directory_to_scan.setText(state["directory"])
+        self.config_file.setText(state["config_path"])
+        self.scanner.load_config(state["config_path"])
+        self.issues = state["issues"]
+        for issue in state["issues"]:
+            self.insert_issue_row(issue.filename, issue.issue, issue.info)
+
+    def closeEvent(self, event):
+        self.scanner.save_ui(
+            self.directory_to_scan.text(),
+            self.config_file.text(),
+            self.issues
+        )
+        event.accept()

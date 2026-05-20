@@ -1,8 +1,8 @@
-import yaml
+import yaml, json
 import os
 # from PySide6.QtCore import QObject, Signal
 
-class Scanner():
+class Scanner:
 
     # progress_updated = Signal(int)  # emits the current count
     # scan_started = Signal(int)  # emits the total file count
@@ -11,8 +11,6 @@ class Scanner():
         # super().__init__()
         self.config = None
         self.config_path = None
-
-
 
     # {'folders': {'M_': '/Materials', 'SKM_': '/Meshes/Skeletal', 'SM_': '/Meshes', 'T_': '/Textures'},
     # 'naming': {'prefixes': {'material': 'M_', 'skeletal_mesh': 'SK_', 'static_mesh': 'SM_', 'texture': 'T_'},
@@ -62,6 +60,10 @@ class Scanner():
                 if location_issue:
                     issues.append(location_issue)
 
+                size_issue = self.check_file_size(file, root)
+                if size_issue:
+                    issues.append(size_issue)
+
                 # count += 1
                 # self.progress_updated.emit(count)
 
@@ -95,6 +97,42 @@ class Scanner():
                     return Issue(file, os.path.join(root, file), "Folder location",
                                  f"'{prefix}' files should be in '{expected_folder}'")
         return None
+
+    def check_file_size(self, file, root):
+        size = round(os.path.getsize(os.path.join(root, file)) / (1024 * 1024),2)
+        allowed_size = self.config["max_file_size_mb"]
+
+        if size > allowed_size:
+            return Issue(file, os.path.join(root, file), "File size", f"File is {size}MB, only {allowed_size}MB allowed")
+        return None
+
+    def save_ui(self, directory, config_path, issues):
+        state = {
+            "directory": directory,
+            "config_path": config_path,
+            "issues": [
+                {
+                    "filename": issue.filename,
+                    "filepath": issue.filepath,
+                    "issue": issue.issue,
+                    "info": issue.info
+                }
+                for issue in issues
+            ]
+        }
+        with open("ui_state.json", "w") as f:
+            json.dump(state, f, indent=2)
+
+    def load_ui(self):
+        if not os.path.exists("ui_state.json"):
+            return None
+        with open("ui_state.json", "r") as f:
+            state = json.load(f)
+        state["issues"] = [
+            Issue(i["filename"], i["filepath"], i["issue"], i["info"])
+            for i in state["issues"]
+        ]
+        return state
 
 
 class Issue:

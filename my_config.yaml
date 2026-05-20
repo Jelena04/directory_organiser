@@ -17,7 +17,6 @@ naming:
     normal: _N
     roughness: _R
 textures:
-  max_file_size_mb: 50
   max_resolution: 2048
   require_power_of_two: true
 allowed_formats:
@@ -26,3 +25,4 @@ allowed_formats:
   - .fbx
   - .abc
   - .wav
+max_file_size_mb: 1
