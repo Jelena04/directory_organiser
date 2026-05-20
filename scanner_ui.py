@@ -1,4 +1,6 @@
-from PySide6.QtWidgets import QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QProgressBar, QFrame, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QFileDialog
+from PySide6.QtWidgets import (QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
+                               QPushButton, QProgressBar, QFrame, QTableWidget, QTableWidgetItem, QHeaderView,
+                               QCheckBox, QFileDialog)
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon
 from scanner_func import Scanner
@@ -26,7 +28,7 @@ class MainWindow(QMainWindow):
 
         label_to_scan = QLabel("Directory to scan")
         label_to_scan.setFixedWidth(100)
-        self.directory_to_scan = QLineEdit()
+        self.directory_to_scan = QLineEdit(text=r"C:\Users\jelen\Documents\Howest - DAE\second_year_part_2\portfolio\exam_project\B_TestDirectory")
         self.directory_to_scan.setFixedWidth(300)
         browse_button = QPushButton("Browse")
         browse_button.clicked.connect(self.pick_scan_directory)
@@ -42,7 +44,7 @@ class MainWindow(QMainWindow):
 
         label_config = QLabel("Config file")
         label_config.setFixedWidth(100)
-        self.config_file = QLineEdit()
+        self.config_file = QLineEdit(text=r"C:\Users\jelen\Documents\Howest - DAE\second_year_part_2\portfolio\exam_project\B_DirectoryOrganiser\my_config.yaml")
         self.config_file.setFixedWidth(300)
         browse_button_config = QPushButton("Browse")
         browse_button_config.clicked.connect(self.pick_config_file)

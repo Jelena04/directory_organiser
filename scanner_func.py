@@ -1,6 +1,6 @@
 import yaml
 import os
-from PySide6.QtCore import QObject, Signal
+# from PySide6.QtCore import QObject, Signal
 
 class Scanner():
 
@@ -11,6 +11,8 @@ class Scanner():
         # super().__init__()
         self.config = None
         self.config_path = None
+
+
 
     # {'folders': {'M_': '/Materials', 'SKM_': '/Meshes/Skeletal', 'SM_': '/Meshes', 'T_': '/Textures'},
     # 'naming': {'prefixes': {'material': 'M_', 'skeletal_mesh': 'SK_', 'static_mesh': 'SM_', 'texture': 'T_'},
@@ -45,22 +47,55 @@ class Scanner():
         issues = []
         allowed_formats = self.config["allowed_formats"]
         for root, dirs, files in os.walk(directory):
-            self.scan_started.emit(len(files))
+            # self.scan_started.emit(len(files))
             # count = 0
             for file in files:
+                ext_issue = self.check_extension(file, allowed_formats, root)
+                if ext_issue:
+                    issues.append(ext_issue)
 
-                basename, extension = os.path.splitext(file)
-                if extension not in allowed_formats:
-                    new_issue = Issue(file,
-                                      os.path.join(root, file),
-                                      "wrong_format",
-                                      f"{extension} not allowed")
-                    issues.append(new_issue)
+                prefix_issue = self.check_prefix(file, root)
+                if prefix_issue:
+                    issues.append(prefix_issue)
+
+                location_issue = self.check_folder(file, root)
+                if location_issue:
+                    issues.append(location_issue)
 
                 # count += 1
                 # self.progress_updated.emit(count)
 
         return issues
+
+    def check_extension(self, file, allowed_formats, root):
+        basename, extension = os.path.splitext(file)
+        if extension not in allowed_formats:
+            new_issue = Issue(file,
+                              os.path.join(root, file),
+                              "File format",
+                              f"{extension} not allowed")
+            return new_issue
+        return None
+
+    def check_prefix(self, file, root):
+        folder_map = self.config["folders"]
+        known_prefixes = folder_map.keys()
+
+        if not any(file.startswith(prefix) for prefix in known_prefixes):
+            return Issue(file, os.path.join(root, file), "Prefix",
+                         f"No valid prefix found — expected one of: {', '.join(known_prefixes)}")
+        return None
+
+    def check_folder(self, file, root):
+        folder_map = self.config["folders"]
+
+        for prefix, expected_folder in folder_map.items():
+            if file.startswith(prefix):
+                if not root.endswith(expected_folder):
+                    return Issue(file, os.path.join(root, file), "Folder location",
+                                 f"'{prefix}' files should be in '{expected_folder}'")
+        return None
+
 
 class Issue:
 
