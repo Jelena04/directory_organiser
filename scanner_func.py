@@ -1,5 +1,6 @@
 import yaml, json
 import os
+from PIL import Image
 # from PySide6.QtCore import QObject, Signal
 
 class Scanner:
@@ -64,6 +65,11 @@ class Scanner:
                 if size_issue:
                     issues.append(size_issue)
 
+                if self.is_image(os.path.join(root, file)):
+                    img_issue = self.check_image_requirements(file, root)
+                    if img_issue:
+                        issues.append(img_issue)
+
                 # count += 1
                 # self.progress_updated.emit(count)
 
@@ -105,6 +111,29 @@ class Scanner:
         if size > allowed_size:
             return Issue(file, os.path.join(root, file), "File size", f"File is {size}MB, only {allowed_size}MB allowed")
         return None
+
+    def is_image(self, filepath):
+        try:
+            with Image.open(filepath) as img:
+                img.verify()
+            return True
+        except Exception:
+            return False
+
+    def check_image_requirements(self, file, root):
+        with Image.open(os.path.join(root, file)) as image:
+            width, height = image.size
+
+            if self.config["textures"]["require_power_of_two"]:
+                if not width == height:
+                    return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height} is not power of two")
+
+            max_res = self.config["textures"]["max_resolution"]
+            if width > max_res:
+                return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}")
+            elif height > max_res:
+                return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}")
+
 
     def save_ui(self, directory, config_path, issues):
         state = {

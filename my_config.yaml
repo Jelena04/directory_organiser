@@ -17,7 +17,7 @@ naming:
     normal: _N
     roughness: _R
 textures:
-  max_resolution: 2048
+  max_resolution: 512
   require_power_of_two: true
 allowed_formats:
   - .png
