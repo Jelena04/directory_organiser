@@ -1,7 +1,9 @@
 import yaml, json
 import os
 from PIL import Image
+import subprocess
 # from PySide6.QtCore import QObject, Signal
+from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
 
 class Scanner:
 
@@ -13,11 +15,6 @@ class Scanner:
         self.config = None
         self.config_path = None
 
-    # {'folders': {'M_': '/Materials', 'SKM_': '/Meshes/Skeletal', 'SM_': '/Meshes', 'T_': '/Textures'},
-    # 'naming': {'prefixes': {'material': 'M_', 'skeletal_mesh': 'SK_', 'static_mesh': 'SM_', 'texture': 'T_'},
-    # 'suffixes': {'static_mesh': None, 'skeletal_mesh': None, 'base_color': '_BC', 'metalness': '_M', 'normal': '_N',
-    # 'roughness': '_R'}}, 'textures': {'allowed_formats': ['.png', '.tga', '.fbx'], 'max_file_size_mb': 50,
-    # 'max_resolution': 2048, 'require_power_of_two': True}}
     def load_config(self, config_filepath):
         if config_filepath == "":
             return "Please enter a config file path"
@@ -105,7 +102,7 @@ class Scanner:
         return None
 
     def check_file_size(self, file, root):
-        size = round(os.path.getsize(os.path.join(root, file)) / (1024 * 1024),2)
+        size = round(os.path.getsize(os.path.join(root, file)) / (1024 * 1024), 2)
         allowed_size = self.config["max_file_size_mb"]
 
         if size > allowed_size:
@@ -133,6 +130,35 @@ class Scanner:
                 return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}")
             elif height > max_res:
                 return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}")
+
+    def rename_file(self, issue):
+        if issue is None:
+            return
+        folder_map = self.config["folders"]
+        known_prefixes = folder_map.keys()
+        dir = os.path.dirname(issue.filepath)
+        basename, extension = os.path.splitext(issue.filename)
+        new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
+        if not ok or not new_name:
+            return False
+        if not any(new_name.startswith(prefix) for prefix in known_prefixes):
+            QMessageBox.warning(None, "Wrong prefix",
+                                f"{new_name} does not have an allowed prefix. Allowed prefixes: {', '.join(known_prefixes)}")
+            return self.rename_file(issue)
+        new_path = os.path.join(dir, f"{new_name}{extension}")
+        os.rename(issue.filepath, new_path)
+        issue.filepath = new_path
+        issue.filename = f"{new_name}{extension}"
+        return True
+
+    def move_file(self, issue):
+        pass
+
+    def delete_file(self, issue):
+        pass
+
+    def open_in_explorer(self, issue):
+        pass
 
 
     def save_ui(self, directory, config_path, issues):

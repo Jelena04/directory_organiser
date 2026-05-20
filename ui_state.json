@@ -1,5 +1,54 @@
 {
   "directory": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory",
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
-  "issues": []
+  "issues": [
+    {
+      "filename": "character_sheet_Liora.pdf",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\character_sheet_Liora.pdf",
+      "issue": "File format",
+      "info": ".pdf not allowed"
+    },
+    {
+      "filename": "character_sheet_Liora.pdf",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\character_sheet_Liora.pdf",
+      "issue": "Prefix",
+      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "character_sheet_Liora.pdf",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\character_sheet_Liora.pdf",
+      "issue": "File size",
+      "info": "File is 2.66MB, only 1MB allowed"
+    },
+    {
+      "filename": "SM_Flower01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\SM_Flower01.fbx",
+      "issue": "Folder location",
+      "info": "'SM_' files should be in '\\Meshes'"
+    },
+    {
+      "filename": "T_GroundTrack_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_GroundTrack_BC.png",
+      "issue": "File size",
+      "info": "File is 1.12MB, only 1MB allowed"
+    },
+    {
+      "filename": "T_GroundTrack_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_GroundTrack_BC.png",
+      "issue": "Image size",
+      "info": "1080px (width) is bigger than max resolution: 512"
+    },
+    {
+      "filename": "T_Pillbug_1_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_1_BC.png",
+      "issue": "Image size",
+      "info": "1024px (width) is bigger than max resolution: 512"
+    },
+    {
+      "filename": "T_Pillbug_2_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_2_BC.png",
+      "issue": "Image size",
+      "info": "1024px (width) is bigger than max resolution: 512"
+    }
+  ]
 }

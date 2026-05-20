@@ -15,11 +15,13 @@ class MainWindow(QMainWindow):
         self.directory_to_scan = None
         self.config_file = None
         self.table = None
+        self.row_selected = None
+        self.issues = []
 
         self.draw_interface()
         self.restore_ui()
 
-        self.issues = []
+
 
     def draw_interface(self):
         main_container = QWidget()
@@ -93,6 +95,7 @@ class MainWindow(QMainWindow):
         self.table.setHorizontalHeaderLabels(["✔", "File", "Issue", "Info"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.table.itemSelectionChanged.connect(self.on_row_selected)
         self.table.horizontalHeader().sectionClicked.connect(self.on_header_clicked)
 
         main_layout.addWidget(self.table)
@@ -100,10 +103,15 @@ class MainWindow(QMainWindow):
         # bottom btns
         btns_row = QHBoxLayout()
         rename_btn = QPushButton("Rename")
+        rename_btn.clicked.connect(self.rename_selected)
         move_btn = QPushButton("Move")
+        move_btn.clicked.connect(lambda: self.scanner.move_file(self.row_selected))
         delete_btn = QPushButton("Delete")
+        delete_btn.clicked.connect(lambda: self.scanner.delete_file(self.row_selected))
         ignore_btn = QPushButton("Ignore")
+        ignore_btn.clicked.connect(self.ignore_file)
         explorer_btn = QPushButton("Open in Explorer")
+        explorer_btn.clicked.connect(lambda: self.scanner.open_in_explorer(self.row_selected))
 
         btns_row.addWidget(rename_btn)
         btns_row.addWidget(move_btn)
@@ -169,6 +177,30 @@ class MainWindow(QMainWindow):
             self.issues = result
             for issue in result:
                 self.insert_issue_row(issue.filename, issue.issue, issue.info)
+
+    def on_row_selected(self):
+        selected_rows = self.table.selectedItems()
+        if not selected_rows:
+            return
+        row = self.table.currentRow()
+        self.row_selected = self.issues[row]
+        print(self.row_selected)
+
+    def ignore_file(self):
+        if self.row_selected is None:
+            return
+        row = self.table.currentRow()
+        self.table.removeRow(row)
+        self.issues.pop(row)
+        self.row_selected = None
+
+    def rename_selected(self):
+        success = self.scanner.rename_file(self.row_selected)
+        if success:
+            row = self.table.currentRow()
+            self.table.removeRow(row)
+            self.issues.pop(row)
+            self.row_selected = None
 
     def restore_ui(self):
         state = self.scanner.load_ui()
