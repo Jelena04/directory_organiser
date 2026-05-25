@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         """)
 
         self.move_btn = QPushButton("Move")
-        self.move_btn.clicked.connect(lambda: self.scanner.move_file(self.row_selected))
+        self.move_btn.clicked.connect(self.move_selected)
         self.move_btn.setEnabled(False)
         self.move_btn.setStyleSheet("""
             QPushButton:enabled {
@@ -197,7 +197,6 @@ class MainWindow(QMainWindow):
         self.table.setRowCount(0)
         self.issues.clear()
         self.issues_solved = 0
-        self.issues_solved_update(False)
 
         nr_files, result = self.scanner.scan(self.directory_to_scan.text())
         self.files_scanned = nr_files
@@ -273,12 +272,20 @@ class MainWindow(QMainWindow):
     def rename_selected(self):
         success = self.scanner.rename_file(self.row_selected)
         if success:
-            row = self.table.currentRow()
-            self.table.removeRow(row)
-            self.issues.pop(row)
-            self.row_selected = None
-            self.issues_solved_update(success)
-            self.update_btns()
+            self.remove_row_on_success()
+
+    def move_selected(self):
+        succes = self.scanner.move_file(self.row_selected, self.directory_to_scan.text())
+        if succes:
+            self.remove_row_on_success()
+
+    def remove_row_on_success(self):
+        row = self.table.currentRow()
+        self.table.removeRow(row)
+        self.issues.pop(row)
+        self.row_selected = None
+        self.issues_solved_update()
+        self.update_btns()
 
     def delete_selected(self):
         selected_rows = self.table.selectionModel().selectedRows()
@@ -300,9 +307,8 @@ class MainWindow(QMainWindow):
 
         self.scanner.open_in_explorer(files)
 
-    def issues_solved_update(self, success):
-        if success:
-            self.issues_solved += 1
+    def issues_solved_update(self):
+        self.issues_solved += 1
         self.reload_result_row()
 
     def restore_ui(self):

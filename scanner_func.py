@@ -128,7 +128,7 @@ class Scanner:
 
     def rename_file(self, issue):
         if issue is None:
-            return
+            return False
 
         folder_map = self.config["folders"]
         known_prefixes = folder_map.keys()
@@ -149,8 +149,30 @@ class Scanner:
         issue.filename = f"{new_name}{extension}"
         return True
 
-    def move_file(self, issue):
-        pass
+    def move_file(self, issue, scan_directory):
+        if issue is None:
+            return False
+
+        filepath = issue.filepath
+        folder_map = self.config["folders"]
+        prefix = issue.filename.split("_")[0] + "_"
+        correct_folder = folder_map[prefix]
+        correct_folder_path = os.path.normpath(os.path.join(scan_directory, correct_folder))
+        print(f"Filepath: {filepath}")
+
+        if not os.path.exists(correct_folder_path):
+            reply = QMessageBox.question(None, "Create folder?", f"No existing {correct_folder} folder found. Create folder?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
+                os.mkdir(correct_folder_path)
+            elif reply == QMessageBox.StandardButton.No:
+                QMessageBox.information(None, "No folder created", f"No {correct_folder} folder created, move operation cancelled.")
+                return False
+
+        destination_path = os.path.join(correct_folder_path, issue.filename)
+        print(f"Destination: {destination_path}")
+        os.rename(filepath, destination_path)
+        return True
+
 
     def delete_files(self, files):
         for file in files:

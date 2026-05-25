@@ -1,8 +1,8 @@
 folders:
-  M_: \Materials
-  SKM_: \Meshes\Skeletal
-  SM_: \Meshes
-  T_: \Textures
+  M_: Materials
+  SKM_: Meshes/Skeletal
+  SM_: Meshes
+  T_: Textures
 naming:
   prefixes:
     material: M_

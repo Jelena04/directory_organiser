@@ -9,16 +9,16 @@
       "info": ".pdf not allowed"
     },
     {
-      "filename": "SM_character_sheet_Liora.pdf",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\SM_character_sheet_Liora.pdf",
+      "filename": "SKM_Pillbug.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Meshes\\Skeletal\\SKM_Pillbug.fbx",
       "issue": "Folder location",
-      "info": "'SM_' files should be in '\\Meshes'"
+      "info": "'SKM_' files should be in 'Meshes/Skeletal'"
     },
     {
       "filename": "SM_Flower01.fbx",
       "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\SM_Flower01.fbx",
       "issue": "Folder location",
-      "info": "'SM_' files should be in '\\Meshes'"
+      "info": "'SM_' files should be in 'Meshes'"
     },
     {
       "filename": "T_Pillbug_1_BC.png",
