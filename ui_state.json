@@ -4,33 +4,21 @@
   "issues": [
     {
       "filename": "SM_character_sheet_Liora.pdf",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\SM_character_sheet_Liora.pdf",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Meshes\\SM_character_sheet_Liora.pdf",
       "issue": "File format",
       "info": ".pdf not allowed"
-    },
-    {
-      "filename": "SKM_Pillbug.fbx",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Meshes\\Skeletal\\SKM_Pillbug.fbx",
-      "issue": "Folder location",
-      "info": "'SKM_' files should be in 'Meshes/Skeletal'"
-    },
-    {
-      "filename": "SM_Flower01.fbx",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\SM_Flower01.fbx",
-      "issue": "Folder location",
-      "info": "'SM_' files should be in 'Meshes'"
     },
     {
       "filename": "T_Pillbug_1_BC.png",
       "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_1_BC.png",
       "issue": "Image size",
-      "info": "1024px (width) is bigger than max resolution: 512"
+      "info": "1024x1024px is bigger than max resolution: 512px"
     },
     {
       "filename": "T_Pillbug_2_BC.png",
       "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_2_BC.png",
       "issue": "Image size",
-      "info": "1024px (width) is bigger than max resolution: 512"
+      "info": "1024x1024px is bigger than max resolution: 512px"
     }
   ]
 }

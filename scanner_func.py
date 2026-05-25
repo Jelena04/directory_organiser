@@ -51,10 +51,9 @@ class Scanner:
 
         nr_files = 0
         for root, dirs, files in os.walk(directory):
-            nr_files = len(files)
+            nr_files += len(files)
 
             for file in files:
-
                 ext_issue = self.check_extension(file, allowed_formats, root)
                 if ext_issue:
                     issues.append(ext_issue)
@@ -63,7 +62,7 @@ class Scanner:
                 if prefix_issue:
                     issues.append(prefix_issue)
 
-                location_issue = self.check_folder(file, root)
+                location_issue = self.check_folder(file, os.path.normpath(root))
                 if location_issue:
                     issues.append(location_issue)
 
@@ -103,6 +102,8 @@ class Scanner:
         for prefix, expected_folder in folder_map.items():
             if file.startswith(prefix):
                 if not root.endswith(expected_folder):
+                    print(f"Root: {root}")
+                    print(f"Expected folder: {expected_folder}")
                     return Issue(file, os.path.join(root, file), "Folder location",
                                  f"'{prefix}' files should be in '{expected_folder}'")
         return None
@@ -132,10 +133,12 @@ class Scanner:
                     return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height} is not power of two")
 
             max_res = self.config["textures"]["max_resolution"]
-            if width > max_res:
-                return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}")
+            if width > max_res and height > max_res:
+                return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height}px is bigger than max resolution: {max_res}px")
+            elif width > max_res:
+                return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}px")
             elif height > max_res:
-                return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}")
+                return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}px")
 
     def open_in_explorer(self, files):
         for file in files:
@@ -189,9 +192,14 @@ class Scanner:
         os.rename(filepath, destination_path)
         return True
 
-    def delete_files(self, files):
-        for file in files:
-            os.remove(file)
+    def delete_files(self, issue):
+        issue_filepath = issue.filepath
+        answer = QMessageBox.question(None, "Delete file", f"Are you sure you want to delete {issue.filename}?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if answer == QMessageBox.StandardButton.Yes:
+            os.remove(issue_filepath)
+            return True
+        elif answer == QMessageBox.StandardButton.No:
+            return False
 
     def save_ui(self, directory, config_path, issues):
         state = {

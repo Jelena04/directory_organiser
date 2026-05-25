@@ -1,6 +1,6 @@
 folders:
   M_: Materials
-  SKM_: Meshes/Skeletal
+  SKM_: Meshes\Skeletal
   SM_: Meshes
   T_: Textures
 naming:

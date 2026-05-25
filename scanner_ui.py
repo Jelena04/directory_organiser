@@ -110,10 +110,6 @@ class MainWindow(QMainWindow):
         # noinspection PyUnresolvedReferences
         self.result_label.setAlignment(Qt.AlignLeft)
         result_row.addWidget(self.result_label)
-        self.issues_solved_label = QLabel(f" - {self.issues_solved} issues solved")
-        # noinspection PyUnresolvedReferences
-        self.issues_solved_label.setAlignment(Qt.AlignLeft)
-        result_row.addWidget(self.issues_solved_label)
         main_layout.addLayout(result_row)
 
         # table
@@ -124,8 +120,6 @@ class MainWindow(QMainWindow):
         self.table.setColumnWidth(1, 150)
         self.table.setColumnWidth(2, 300)
         self.table.horizontalHeader().setStretchLastSection(True)
-        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.table.itemSelectionChanged.connect(self.on_row_selected)
 
@@ -275,14 +269,20 @@ class MainWindow(QMainWindow):
         self.scanner.open_in_explorer(files)
 
     def rename_pressed(self):
-        success = self.scanner.rename_file(self.row_selected)
-        if success:
-            self.remove_row_on_success()
+        selected_rows = self.table.selectionModel().selectedRows()
+        for row in reversed(selected_rows):
+            row_nr = row.row()
+            success = self.scanner.rename_file(self.issues[row_nr])
+            if success:
+                self.remove_row_on_success(row_nr)
 
     def move_pressed(self):
-        success = self.scanner.move_file(self.row_selected, self.directory_to_scan.text())
-        if success:
-            self.remove_row_on_success()
+        selected_rows = self.table.selectionModel().selectedRows()
+        for row in reversed(selected_rows):
+            row_nr = row.row()
+            success = self.scanner.move_file(self.issues[row_nr], self.directory_to_scan.text())
+            if success:
+                self.remove_row_on_success(row_nr)
 
     def ignore_pressed(self):
         if self.row_selected is None:
@@ -297,25 +297,20 @@ class MainWindow(QMainWindow):
 
     def delete_pressed(self):
         selected_rows = self.table.selectionModel().selectedRows()
-        files = []
+
         for row in selected_rows:
             row_nr = row.row()
-            issue_filepath = self.issues[row_nr].filepath
-            files.append(issue_filepath)
+            self.scanner.delete_files(self.issues[row_nr])
 
-        self.scanner.delete_files(files)
 
-    def remove_row_on_success(self):
-        row = self.table.currentRow()
+
+    def remove_row_on_success(self, row):
         self.table.removeRow(row)
         self.issues.pop(row)
-        self.row_selected = None
-        self.issues_solved_update()
-        self.update_btns()
-
-    def issues_solved_update(self):
         self.issues_solved += 1
         self.reload_result_row()
+        self.update_btns()
+
 
     def closeEvent(self, event):
         self.scanner.save_ui(
