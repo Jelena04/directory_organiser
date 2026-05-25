@@ -10,6 +10,17 @@ class Scanner:
         self.config = None
         self.config_path = None
 
+    def load_ui(self):
+        if not os.path.exists("ui_state.json"):
+            return None
+        with open("ui_state.json", "r") as f:
+            state = json.load(f)
+        state["issues"] = [
+            Issue(i["filename"], i["filepath"], i["issue"], i["info"])
+            for i in state["issues"]
+        ]
+        return state
+
     def load_config(self, config_filepath):
         if config_filepath == "":
             return "Please enter a config file path"
@@ -60,7 +71,7 @@ class Scanner:
                 if size_issue:
                     issues.append(size_issue)
 
-                if self.is_image(os.path.join(root, file)):
+                if self.helper_is_image(os.path.join(root, file)):
                     img_issue = self.check_image_requirements(file, root)
                     if img_issue:
                         issues.append(img_issue)
@@ -104,7 +115,7 @@ class Scanner:
             return Issue(file, os.path.join(root, file), "File size", f"File is {size}MB, only {allowed_size}MB allowed")
         return None
 
-    def is_image(self, filepath):
+    def helper_is_image(self, filepath):
         try:
             with Image.open(filepath) as img:
                 img.verify()
@@ -125,6 +136,11 @@ class Scanner:
                 return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}")
             elif height > max_res:
                 return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}")
+
+    def open_in_explorer(self, files):
+        for file in files:
+            normalized = os.path.normpath(file)
+            subprocess.Popen(f'explorer /select,"{normalized}"')
 
     def rename_file(self, issue):
         if issue is None:
@@ -173,15 +189,9 @@ class Scanner:
         os.rename(filepath, destination_path)
         return True
 
-
     def delete_files(self, files):
         for file in files:
             os.remove(file)
-
-    def open_in_explorer(self, files):
-        for file in files:
-            normalized = os.path.normpath(file)
-            subprocess.Popen(f'explorer /select,"{normalized}"')
 
     def save_ui(self, directory, config_path, issues):
         state = {
@@ -199,17 +209,6 @@ class Scanner:
         }
         with open("ui_state.json", "w") as f:
             json.dump(state, f, indent=2)
-
-    def load_ui(self):
-        if not os.path.exists("ui_state.json"):
-            return None
-        with open("ui_state.json", "r") as f:
-            state = json.load(f)
-        state["issues"] = [
-            Issue(i["filename"], i["filepath"], i["issue"], i["info"])
-            for i in state["issues"]
-        ]
-        return state
 
 
 class Issue:
