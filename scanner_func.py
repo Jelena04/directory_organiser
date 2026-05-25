@@ -1,17 +1,12 @@
 import yaml, json
 import os
-from PIL import Image
 import subprocess
-# from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
+from PIL import Image
+from PySide6.QtWidgets import QInputDialog, QMessageBox
 
 class Scanner:
 
-    # progress_updated = Signal(int)  # emits the current count
-    # scan_started = Signal(int)  # emits the total file count
-
     def __init__(self):
-        # super().__init__()
         self.config = None
         self.config_path = None
 
@@ -42,10 +37,13 @@ class Scanner:
 
         issues = []
         allowed_formats = self.config["allowed_formats"]
+
+        nr_files = 0
         for root, dirs, files in os.walk(directory):
-            # self.scan_started.emit(len(files))
-            # count = 0
+            nr_files = len(files)
+
             for file in files:
+
                 ext_issue = self.check_extension(file, allowed_formats, root)
                 if ext_issue:
                     issues.append(ext_issue)
@@ -67,10 +65,7 @@ class Scanner:
                     if img_issue:
                         issues.append(img_issue)
 
-                # count += 1
-                # self.progress_updated.emit(count)
-
-        return issues
+        return nr_files,issues
 
     def check_extension(self, file, allowed_formats, root):
         basename, extension = os.path.splitext(file)
@@ -134,17 +129,20 @@ class Scanner:
     def rename_file(self, issue):
         if issue is None:
             return
+
         folder_map = self.config["folders"]
         known_prefixes = folder_map.keys()
         dir = os.path.dirname(issue.filepath)
         basename, extension = os.path.splitext(issue.filename)
         new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
+
         if not ok or not new_name:
             return False
         if not any(new_name.startswith(prefix) for prefix in known_prefixes):
             QMessageBox.warning(None, "Wrong prefix",
                                 f"{new_name} does not have an allowed prefix. Allowed prefixes: {', '.join(known_prefixes)}")
             return self.rename_file(issue)
+
         new_path = os.path.join(dir, f"{new_name}{extension}")
         os.rename(issue.filepath, new_path)
         issue.filepath = new_path
@@ -154,12 +152,14 @@ class Scanner:
     def move_file(self, issue):
         pass
 
-    def delete_file(self, issue):
-        pass
+    def delete_files(self, files):
+        for file in files:
+            os.remove(file)
 
-    def open_in_explorer(self, issue):
-        pass
-
+    def open_in_explorer(self, files):
+        for file in files:
+            normalized = os.path.normpath(file)
+            subprocess.Popen(f'explorer /select,"{normalized}"')
 
     def save_ui(self, directory, config_path, issues):
         state = {

@@ -25,4 +25,4 @@ allowed_formats:
   - .fbx
   - .abc
   - .wav
-max_file_size_mb: 1
+max_file_size_mb: 50
