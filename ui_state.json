@@ -9,16 +9,13 @@
       "info": ".pdf not allowed"
     },
     {
-      "filename": "T_Pillbug_1_BC.png",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_1_BC.png",
-      "issue": "Image size",
-      "info": "1024x1024px is bigger than max resolution: 512px"
-    },
-    {
       "filename": "T_Pillbug_2_BC.png",
       "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_2_BC.png",
       "issue": "Image size",
       "info": "1024x1024px is bigger than max resolution: 512px"
     }
-  ]
+  ],
+  "files_checked": 9,
+  "issues_found": 2,
+  "issues_solved": 0
 }

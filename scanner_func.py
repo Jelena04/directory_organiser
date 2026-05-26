@@ -22,7 +22,10 @@ class Scanner:
             Issue(i["filename"], i["filepath"], i["issue"], i["info"])
             for i in state["issues"]
         ]
-        return state
+        files_scanned = state["files_checked"]
+        issues_found = state["issues_found"]
+        issues_solved = state["issues_solved"]
+        return state, files_scanned, issues_found, issues_solved
 
     def load_config(self, config_filepath):
         if config_filepath == "":
@@ -219,7 +222,7 @@ class Scanner:
         elif answer == QMessageBox.StandardButton.No:
             return False
 
-    def save_ui(self, directory, config_path, issues):
+    def save_ui(self, directory, config_path, issues, files_checked, issues_solved):
         state = {
             "directory": directory,
             "config_path": config_path,
@@ -231,7 +234,10 @@ class Scanner:
                     "info": issue.info
                 }
                 for issue in issues
-            ]
+            ],
+            "files_checked": files_checked,
+            "issues_found": len(issues),
+            "issues_solved": issues_solved
         }
         with open("ui_state.json", "w") as f:
             json.dump(state, f, indent=2)

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
                                QPushButton, QFrame, QTableWidget, QTableWidgetItem, QFileDialog)
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QFont
 from scanner_func import Scanner
 
 class MainWindow(QMainWindow):
@@ -18,8 +18,9 @@ class MainWindow(QMainWindow):
         self.problems_found = 0
         self.issues_solved = 0
 
-        self.result_label = None
-        self.issues_solved_label = None
+        self.label_scanned_files = None
+        self.label_issues_found = None
+        self.label_issues_solved = None
 
         self.table = None
         self.row_selected = None
@@ -36,7 +37,7 @@ class MainWindow(QMainWindow):
         self.restore_ui()
 
     def restore_ui(self):
-        state = self.scanner.load_ui()
+        state, files_checked, issues_found, issues_solved = self.scanner.load_ui()
 
         if not state:
             return
@@ -45,6 +46,10 @@ class MainWindow(QMainWindow):
         self.config_file.setText(state["config_path"])
         self.scanner.load_config(state["config_path"])
         self.issues = state["issues"]
+        self.files_scanned = files_checked
+        self.problems_found = issues_found
+        self.issues_solved = issues_solved
+        self.reload_result_row()
 
         for issue in state["issues"]:
             self.insert_issue_row(issue.filename, issue.issue, issue.info)
@@ -102,15 +107,88 @@ class MainWindow(QMainWindow):
         separator.setFrameShadow(QFrame.Shadow.Sunken)
         main_layout.addWidget(separator)
 
-        # result row
-        result_row = QHBoxLayout()
-        result_row.setSpacing(0)
-        result_row.setContentsMargins(0,0,0,0)
-        self.result_label = QLabel(f"Result: {self.files_scanned} files scanned - {self.problems_found} issues found - {self.issues_solved} issues solved")
-        # noinspection PyUnresolvedReferences
-        self.result_label.setAlignment(Qt.AlignLeft)
-        result_row.addWidget(self.result_label)
-        main_layout.addLayout(result_row)
+        # cards
+        cards_layout = QHBoxLayout()
+
+        # <editor-fold desc="Files Scanned Card">
+        files_scanned = QWidget()
+        files_scanned.setStyleSheet("""
+                    background-color: #dee3f3;
+                    border: 1px solid #979add;
+                    border-radius: 8px;
+                """)
+        card_layout = QVBoxLayout(files_scanned)
+        card_layout.setContentsMargins(12, 10, 12, 10)
+        card_layout.setSpacing(4)
+
+        label = QLabel("FILES SCANNED")
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("font-size: 11px; color: #0a1350; background: transparent; border: none;")
+
+        self.label_scanned_files = QLabel(str(self.files_scanned))
+        self.label_scanned_files.setAlignment(Qt.AlignCenter)
+        self.label_scanned_files.setStyleSheet(
+            "font-size: 28px; font-weight: 500; color: #0a1350; background: transparent; border: none;")
+
+        card_layout.addWidget(label)
+        card_layout.addWidget(self.label_scanned_files)
+
+        cards_layout.addWidget(files_scanned)
+        # </editor-fold>
+
+        # <editor-fold desc="Issues Found Card">
+        files_scanned = QWidget()
+        files_scanned.setStyleSheet("""
+                    background-color: #f3e6de;
+                    border: 1px solid #ddad97;
+                    border-radius: 8px;
+                """)
+        card_layout = QVBoxLayout(files_scanned)
+        card_layout.setContentsMargins(12, 10, 12, 10)
+        card_layout.setSpacing(4)
+
+        label = QLabel("ISSUES FOUND")
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("font-size: 11px; color: #50180a; background: transparent; border: none;")
+
+        self.label_issues_found = QLabel(str(self.problems_found))
+        self.label_issues_found.setAlignment(Qt.AlignCenter)
+        self.label_issues_found.setStyleSheet(
+            "font-size: 28px; font-weight: 500; color: #50180a; background: transparent; border: none;")
+
+        card_layout.addWidget(label)
+        card_layout.addWidget(self.label_issues_found)
+
+        cards_layout.addWidget(files_scanned)
+        # </editor-fold>
+
+        # <editor-fold desc="Issues Solved Card">
+        files_scanned = QWidget()
+        files_scanned.setStyleSheet("""
+            background-color: #EAF3DE;
+            border: 1px solid #C0DD97;
+            border-radius: 8px;
+        """)
+        card_layout = QVBoxLayout(files_scanned)
+        card_layout.setContentsMargins(12, 10, 12, 10)
+        card_layout.setSpacing(4)
+
+        label = QLabel("ISSUES SOLVED")
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("font-size: 11px; color: #3B6D11; background: transparent; border: none;")
+
+        self.label_issues_solved = QLabel(str(self.issues_solved))
+        self.label_issues_solved.setAlignment(Qt.AlignCenter)
+        self.label_issues_solved.setStyleSheet(
+            "font-size: 28px; font-weight: 500; color: #27500A; background: transparent; border: none;")
+
+        card_layout.addWidget(label)
+        card_layout.addWidget(self.label_issues_solved)
+
+        cards_layout.addWidget(files_scanned)
+        main_layout.addLayout(cards_layout)
+        # </editor-fold>
+
 
         # table
         self.table = QTableWidget()
@@ -254,9 +332,9 @@ class MainWindow(QMainWindow):
                 self.insert_issue_row(issue.filename, issue.issue, issue.info)
 
     def reload_result_row(self):
-        self.result_label.setText(
-            f"Result: {self.files_scanned} files scanned - {self.problems_found} issues found - {self.issues_solved} issues solved"
-        )
+        self.label_scanned_files.setText(str(self.files_scanned))
+        self.label_issues_found.setText(str(self.problems_found))
+        self.label_issues_solved.setText(str(self.issues_solved))
 
     def explorer_pressed(self):
         selected_rows = self.table.selectionModel().selectedRows()
@@ -315,6 +393,8 @@ class MainWindow(QMainWindow):
         self.scanner.save_ui(
             self.directory_to_scan.text(),
             self.config_file.text(),
-            self.issues
+            self.issues,
+            self.files_scanned,
+            self.issues_solved,
         )
         event.accept()
