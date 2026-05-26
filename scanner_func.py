@@ -10,6 +10,9 @@ class Scanner:
         self.config = None
         self.config_path = None
 
+        self.correct_prefixes = None
+        self.correct_suffixes = None
+
     def load_ui(self):
         if not os.path.exists("ui_state.json"):
             return None
@@ -31,6 +34,9 @@ class Scanner:
             with open(config_filepath, "r") as file:
                 self.config = yaml.safe_load(file)
                 self.config_path = config_filepath
+
+                self.correct_prefixes = [key if key else "" for key in self.config["naming"]["prefixes"].values()]
+                self.correct_suffixes = [key if key else "" for key in self.config["naming"]["suffixes"].values()]
             return None
         except Exception as e:
             return str(e)
@@ -62,6 +68,10 @@ class Scanner:
                 if prefix_issue:
                     issues.append(prefix_issue)
 
+                suffix_issue = self.check_suffix(file, root)
+                if suffix_issue:
+                    issues.append(suffix_issue)
+
                 location_issue = self.check_folder(file, os.path.normpath(root))
                 if location_issue:
                     issues.append(location_issue)
@@ -88,13 +98,21 @@ class Scanner:
         return None
 
     def check_prefix(self, file, root):
-        folder_map = self.config["folders"]
-        known_prefixes = folder_map.keys()
+        print(self.correct_prefixes)
 
-        if not any(file.startswith(prefix) for prefix in known_prefixes):
+        if not any(file.startswith(prefix) for prefix in self.correct_prefixes):
             return Issue(file, os.path.join(root, file), "Prefix",
-                         f"No valid prefix found — expected one of: {', '.join(known_prefixes)}")
+                         f"No valid prefix found — expected one of: {', '.join(self.correct_prefixes)}")
         return None
+
+    def check_suffix(self, file, root):
+        print(self.correct_suffixes)
+
+        if not any(file.startswith(prefix) for prefix in self.correct_suffixes):
+            return Issue(file, os.path.join(root, file), "Suffix",
+                         f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
+        return None
+
 
     def check_folder(self, file, root):
         folder_map = self.config["folders"]

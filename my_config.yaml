@@ -6,7 +6,7 @@ folders:
 naming:
   prefixes:
     material: M_
-    skeletal_mesh: SK_
+    skeletal_mesh: SKM_
     static_mesh: SM_
     texture: T_
   suffixes:

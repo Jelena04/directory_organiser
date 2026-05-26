@@ -303,7 +303,6 @@ class MainWindow(QMainWindow):
             self.scanner.delete_files(self.issues[row_nr])
 
 
-
     def remove_row_on_success(self, row):
         self.table.removeRow(row)
         self.issues.pop(row)
