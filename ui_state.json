@@ -3,10 +3,28 @@
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
   "issues": [
     {
-      "filename": "SM_character_sheet_Liora.pdf",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Meshes\\SM_character_sheet_Liora.pdf",
-      "issue": "File format",
-      "info": ".pdf not allowed"
+      "filename": "SM_Grass02.fbx",
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory\\Textures\\SM_Grass02.fbx",
+      "issue": "Folder location",
+      "info": "'SM_' files should be in 'Meshes'"
+    },
+    {
+      "filename": "S_Flower01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\S_Flower01.fbx",
+      "issue": "Prefix",
+      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "S_Grass01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\S_Grass01.fbx",
+      "issue": "Prefix",
+      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "T_Pillbug_1_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_1_BC.png",
+      "issue": "Image size",
+      "info": "1024x1024px is bigger than max resolution: 512px"
     },
     {
       "filename": "T_Pillbug_2_BC.png",
@@ -15,7 +33,7 @@
       "info": "1024x1024px is bigger than max resolution: 512px"
     }
   ],
-  "files_checked": 9,
-  "issues_found": 2,
+  "files_checked": 8,
+  "issues_found": 5,
   "issues_solved": 0
 }
