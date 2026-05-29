@@ -50,13 +50,13 @@ class Scanner:
                 self.config = yaml.safe_load(file)
                 self.config_path = config_filepath
 
-                self.correct_prefixes = [key if key else "" for key in self.config["naming"]["prefixes"].values()]
-                self.correct_suffixes = [key if key else "" for key in self.config["naming"]["suffixes"].values()]
+                self.correct_prefixes = [key if key else "" for key in self.config["game_ready"]["naming"]["prefixes"].values()]
+                self.correct_suffixes = [key if key else "" for key in self.config["game_ready"]["naming"]["suffixes"].values()]
             return None
         except Exception as e:
             return str(e)
 
-    def scan(self, directory):
+    def scan(self, directory, mode):
         """
         Walk the given directory recursively and check every file against all configured rules (extentions, prefix,
         suffix, folder location, file size, and image requirements).
@@ -75,7 +75,7 @@ class Scanner:
             return 0, "Given config file path doesn't exist"
 
         issues = []
-        allowed_formats = self.config["allowed_formats"]
+        allowed_formats = self.config[mode]["allowed_formats"]
 
         nr_files = 0
         for root, dirs, files in os.walk(directory):
@@ -98,7 +98,7 @@ class Scanner:
                 if location_issue:
                     issues.append(location_issue)
 
-                size_issue = self.check_file_size(file, root)
+                size_issue = self.check_file_size(file, root, mode)
                 if size_issue:
                     issues.append(size_issue)
 
@@ -158,7 +158,7 @@ class Scanner:
         :param root: Root of the file to be checked
         :return: Issue object if the file is in the wrong folder, otherwise None
         """
-        folder_map = self.config["folders"]
+        folder_map = self.config["game_ready"]["folders"]
 
         for prefix, expected_folder in folder_map.items():
             if file.startswith(prefix):
@@ -167,7 +167,7 @@ class Scanner:
                                  f"'{prefix}' files should be in '{expected_folder}'")
         return None
 
-    def check_file_size(self, file, root):
+    def check_file_size(self, file, root, mode):
         """
         Check whether the file's size in MB exceeds the configured maximum.
         :param file: File to be checked
@@ -175,7 +175,7 @@ class Scanner:
         :return: Issue object if the file is too large, otherwise None
         """
         size = round(os.path.getsize(os.path.join(root, file)) / (1024 * 1024), 2)
-        allowed_size = self.config["max_file_size_mb"]
+        allowed_size = self.config[mode]["max_file_size_mb"]
 
         if size > allowed_size:
             return Issue(file, os.path.join(root, file), "File size", f"File is {size}MB, only {allowed_size}MB allowed")
@@ -205,11 +205,11 @@ class Scanner:
         with Image.open(os.path.join(root, file)) as image:
             width, height = image.size
 
-            if self.config["textures"]["require_power_of_two"]:
+            if self.config["game_ready"]["textures"]["require_power_of_two"]:
                 if not width == height:
                     return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height} is not power of two")
 
-            max_res = self.config["textures"]["max_resolution"]
+            max_res = self.config["game_ready"]["textures"]["max_resolution"]
             if width > max_res and height > max_res:
                 return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height}px is bigger than max resolution: {max_res}px")
             elif width > max_res:
@@ -236,8 +236,7 @@ class Scanner:
         if issue is None:
             return False
 
-        folder_map = self.config["folders"]
-        known_prefixes = folder_map.keys()
+        known_prefixes = self.correct_prefixes
         dir = os.path.dirname(issue.filepath)
         basename, extension = os.path.splitext(issue.filename)
         new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
@@ -267,7 +266,7 @@ class Scanner:
             return False
 
         filepath = issue.filepath
-        folder_map = self.config["folders"]
+        folder_map = self.config["game_ready"]["folders"]
         prefix = issue.filename.split("_")[0] + "_"
         correct_folder = folder_map[prefix]
         correct_folder_path = os.path.normpath(os.path.join(scan_directory, correct_folder))

@@ -18,8 +18,8 @@ class MainWindow(QMainWindow):
         self.directory_to_scan = None
         self.config_file = None
 
-        self.game_ready_button = None
-        self.source_button = None
+        self.btn_game_ready = None
+        self.btn_source = None
 
         self.files_scanned = 0
         self.problems_found = 0
@@ -478,7 +478,10 @@ class MainWindow(QMainWindow):
         self.issues.clear()
         self.issues_solved = 0
 
-        nr_files, result = self.scanner.scan(self.directory_to_scan.text())
+        if self.btn_game_ready.isChecked():
+            nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
+        elif self.btn_source.isChecked():
+            nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "source")
 
         if type(result) == str:
             QMessageBox.warning(None, "Error reading file path", result)

@@ -45,3 +45,4 @@ source:
     - .spp
     - .zpr
     - .rpp
+  max_file_size_mb: 100

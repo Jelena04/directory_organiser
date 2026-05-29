@@ -3,20 +3,8 @@
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
   "issues": [
     {
-      "filename": "SM_Grass02.fbx",
-      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory\\Textures\\SM_Grass02.fbx",
-      "issue": "Folder location",
-      "info": "'SM_' files should be in 'Meshes'"
-    },
-    {
       "filename": "S_Flower01.fbx",
       "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\S_Flower01.fbx",
-      "issue": "Prefix",
-      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
-    },
-    {
-      "filename": "S_Grass01.fbx",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\S_Grass01.fbx",
       "issue": "Prefix",
       "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
     },
@@ -34,6 +22,6 @@
     }
   ],
   "files_checked": 8,
-  "issues_found": 5,
-  "issues_solved": 0
+  "issues_found": 3,
+  "issues_solved": 2
 }
