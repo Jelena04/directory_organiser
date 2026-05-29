@@ -1,3 +1,5 @@
+import re
+
 import yaml, json
 import os
 import subprocess
@@ -12,6 +14,9 @@ class Scanner:
 
         self.correct_prefixes = None
         self.correct_suffixes = None
+
+        self.regex_pattern = None
+        self.banned_words = None
 
     def load_ui(self):
         """
@@ -52,6 +57,11 @@ class Scanner:
 
                 self.correct_prefixes = [key if key else "" for key in self.config["game_ready"]["naming"]["prefixes"].values()]
                 self.correct_suffixes = [key if key else "" for key in self.config["game_ready"]["naming"]["suffixes"].values()]
+
+                pattern = self.config["source"]["naming"]["pattern"]
+                self.regex_pattern = re.compile(pattern)
+
+                self.banned_words = self.config["source"]["naming"]["banned_words"]
             return None
         except Exception as e:
             return str(e)
@@ -86,26 +96,31 @@ class Scanner:
                 if ext_issue:
                     issues.append(ext_issue)
 
-                prefix_issue = self.check_prefix(file, root)
-                if prefix_issue:
-                    issues.append(prefix_issue)
-
-                suffix_issue = self.check_suffix(file, root)
-                if suffix_issue:
-                    issues.append(suffix_issue)
-
-                location_issue = self.check_folder(file, os.path.normpath(root))
-                if location_issue:
-                    issues.append(location_issue)
-
                 size_issue = self.check_file_size(file, root, mode)
                 if size_issue:
                     issues.append(size_issue)
 
-                if self.helper_is_image(os.path.join(root, file)):
-                    img_issue = self.check_image_requirements(file, root)
-                    if img_issue:
-                        issues.append(img_issue)
+                if mode == "game_ready":
+                    prefix_issue = self.check_prefix(file, root)
+                    if prefix_issue:
+                        issues.append(prefix_issue)
+
+                    suffix_issue = self.check_suffix(file, root)
+                    if suffix_issue:
+                        issues.append(suffix_issue)
+
+                    location_issue = self.check_folder(file, os.path.normpath(root))
+                    if location_issue:
+                        issues.append(location_issue)
+
+                    if self.helper_is_image(os.path.join(root, file)):
+                        img_issue = self.check_image_requirements(file, root)
+                        if img_issue:
+                            issues.append(img_issue)
+                elif mode == "source":
+                    naming_issue = self.check_source_naming(file, root)
+                    if naming_issue:
+                        issues.append(naming_issue)
 
         return nr_files,issues
 
@@ -149,6 +164,27 @@ class Scanner:
             return Issue(file, os.path.join(root, file), "Suffix",
                          f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
         return None
+
+    def check_source_naming(self, file, root):
+        basename, extension = os.path.splitext(file)
+        matches_regex = True
+        if not self.regex_pattern.match(basename):
+            matches_regex = False
+
+        banned_words_found = []
+        banned_words_found_bool = False
+        for word in self.banned_words:
+            if word in basename.lower():
+                banned_words_found.append(word)
+        if len(banned_words_found) > 0:
+            banned_words_found_bool = True
+
+        if matches_regex == False and banned_words_found_bool == True:
+            return Issue(file, os.path.join(root, file), "Naming", f"{basename} should follow convention (ex. large_crate_v03) and contains banned words: {', '.join(banned_words_found)}")
+        elif matches_regex == False:
+            return Issue(file, os.path.join(root, file), "Naming", f"{basename} should follow convention (ex. large_crate_v03)")
+        elif banned_words_found_bool == True:
+            return Issue(file, os.path.join(root, file), "Naming", f"{basename} contains banned words: {', '.join(banned_words_found)}")
 
     def check_folder(self, file, root):
         """
@@ -237,16 +273,38 @@ class Scanner:
             return False
 
         known_prefixes = self.correct_prefixes
+        known_suffixes = self.correct_suffixes
         dir = os.path.dirname(issue.filepath)
         basename, extension = os.path.splitext(issue.filename)
-        new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
 
-        if not ok or not new_name:
-            return False
-        if not any(new_name.startswith(prefix) for prefix in known_prefixes):
-            QMessageBox.warning(None, "Wrong prefix",
-                                f"{new_name} does not have an allowed prefix. Allowed prefixes: {', '.join(known_prefixes)}")
-            return self.rename_file(issue)
+        if issue.issue == "Prefix":
+            new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
+
+            if not ok or not new_name:
+                return False
+            if not any(new_name.startswith(prefix) for prefix in known_prefixes):
+                QMessageBox.warning(None, "Wrong prefix",
+                                    f"{new_name} does not have an allowed prefix. Allowed prefixes: {', '.join(known_prefixes)}")
+                return self.rename_file(issue)
+
+        elif issue.issue == "Suffix":
+            new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
+
+            if not ok or not new_name:
+                return False
+            if not any(new_name.startswith(suffix) for suffix in known_suffixes):
+                QMessageBox.warning(None, "Wrong suffix",
+                                    f"{new_name} does not have an allowed suffix. Allowed suffixes: {', '.join(known_suffixes)}")
+                return self.rename_file(issue)
+
+        elif issue.issue == "Naming":
+            new_name, ok = QInputDialog.getText(None, "Rename", "New filename:", text=basename)
+
+            if not ok or not new_name:
+                return False
+            if not self.regex_pattern.match(new_name) or any(word in new_name for word in self.banned_words):
+                QMessageBox.warning(None, "Wrong naming", f"{new_name} doesn't follow the convention or contains banned words")
+                return self.rename_file(issue)
 
         new_path = os.path.join(dir, f"{new_name}{extension}")
         os.rename(issue.filepath, new_path)

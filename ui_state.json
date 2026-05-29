@@ -1,27 +1,51 @@
 {
-  "directory": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory",
+  "directory": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source",
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
   "issues": [
     {
-      "filename": "S_Flower01.fbx",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\S_Flower01.fbx",
-      "issue": "Prefix",
-      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
+      "filename": "art_bible_v01.PDF",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\art_bible_v01.PDF",
+      "issue": "File format",
+      "info": ".PDF not allowed"
     },
     {
-      "filename": "T_Pillbug_1_BC.png",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_1_BC.png",
-      "issue": "Image size",
-      "info": "1024x1024px is bigger than max resolution: 512px"
+      "filename": "art_bible_v02.PDF",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\art_bible_v02.PDF",
+      "issue": "File format",
+      "info": ".PDF not allowed"
     },
     {
-      "filename": "T_Pillbug_2_BC.png",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory\\Textures\\T_Pillbug_2_BC.png",
-      "issue": "Image size",
-      "info": "1024x1024px is bigger than max resolution: 512px"
+      "filename": "general_foliage_final.psd",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\general_foliage_final.psd",
+      "issue": "File size",
+      "info": "File is 129.56MB, only 100MB allowed"
+    },
+    {
+      "filename": "general_foliage_v01.psd",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\general_foliage_v01.psd",
+      "issue": "File size",
+      "info": "File is 129.56MB, only 100MB allowed"
+    },
+    {
+      "filename": "general_foliage_v02.psd",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\general_foliage_v02.psd",
+      "issue": "File size",
+      "info": "File is 129.56MB, only 100MB allowed"
+    },
+    {
+      "filename": "track_final_v02.blend",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\track_final_v02.blend",
+      "issue": "Naming",
+      "info": "track_final_v02 contains banned words: final"
+    },
+    {
+      "filename": "T_HUD_v01.psd",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source\\T_HUD_v01.psd",
+      "issue": "Naming",
+      "info": "T_HUD_v01 should follow convention (ex. large_crate_v03)"
     }
   ],
-  "files_checked": 8,
-  "issues_found": 3,
-  "issues_solved": 2
+  "files_checked": 16,
+  "issues_found": 7,
+  "issues_solved": 3
 }

@@ -457,7 +457,7 @@ class MainWindow(QMainWindow):
         elif all(issue == "Folder location" for issue in selected_issues):
             self.rename_btn.setEnabled(False)
             self.move_btn.setEnabled(True)
-        elif all(issue == "Prefix" or issue == "Suffix" for issue in selected_issues):
+        elif all(issue == "Prefix" or issue == "Suffix" or issue == "Naming" for issue in selected_issues):
             self.rename_btn.setEnabled(True)
             self.move_btn.setEnabled(False)
         elif all(issue == "Image size" for issue in selected_issues):
