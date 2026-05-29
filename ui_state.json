@@ -1,6 +1,11 @@
 {
   "directory": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_Source",
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
+  "game_ready": true,
+  "source": false,
+  "files_checked": 16,
+  "issues_found": 7,
+  "issues_solved": 3,
   "issues": [
     {
       "filename": "art_bible_v01.PDF",
@@ -44,8 +49,5 @@
       "issue": "Naming",
       "info": "T_HUD_v01 should follow convention (ex. large_crate_v03)"
     }
-  ],
-  "files_checked": 16,
-  "issues_found": 7,
-  "issues_solved": 3
+  ]
 }

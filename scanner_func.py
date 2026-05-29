@@ -29,14 +29,17 @@ class Scanner:
             return None
         with open("ui_state.json", "r") as f:
             state = json.load(f)
+        game_ready = state["game_ready"]
+        source = state["source"]
+        files_scanned = state["files_checked"]
+        issues_found = state["issues_found"]
+        issues_solved = state["issues_solved"]
         state["issues"] = [
             Issue(i["filename"], i["filepath"], i["issue"], i["info"])
             for i in state["issues"]
         ]
-        files_scanned = state["files_checked"]
-        issues_found = state["issues_found"]
-        issues_solved = state["issues_solved"]
-        return state, files_scanned, issues_found, issues_solved
+
+        return state, files_scanned, issues_found, issues_solved, game_ready, source
 
     def load_config(self, config_filepath):
         """
@@ -355,7 +358,7 @@ class Scanner:
         elif answer == QMessageBox.StandardButton.No:
             return False
 
-    def save_ui(self, directory, config_path, issues, files_checked, issues_solved):
+    def save_ui(self, directory, config_path, issues, files_checked, issues_solved, game_ready, source):
         """
         Serialize and save the current UI state to 'ui_state.json', including the scanned directory, config path, issue
         list, and scan statistics.
@@ -368,6 +371,11 @@ class Scanner:
         state = {
             "directory": directory,
             "config_path": config_path,
+            "game_ready": game_ready,
+            "source": source,
+            "files_checked": files_checked,
+            "issues_found": len(issues),
+            "issues_solved": issues_solved,
             "issues": [
                 {
                     "filename": issue.filename,
@@ -377,9 +385,7 @@ class Scanner:
                 }
                 for issue in issues
             ],
-            "files_checked": files_checked,
-            "issues_found": len(issues),
-            "issues_solved": issues_solved
+
         }
         with open("ui_state.json", "w") as f:
             json.dump(state, f, indent=2)

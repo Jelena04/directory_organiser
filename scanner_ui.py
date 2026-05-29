@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
-                               QPushButton, QFrame, QTableWidget, QTableWidgetItem, QFileDialog, QButtonGroup, QSpacerItem)
+                               QPushButton, QTableWidget, QTableWidgetItem, QFileDialog, QButtonGroup, QSpacerItem)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from scanner_func import Scanner
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         Load and apply a previously saved UI state: restores input fields, config, issue list, and scan statistics.
         Repopulates the table.
         """
-        state, files_checked, issues_found, issues_solved = self.scanner.load_ui()
+        state, files_checked, issues_found, issues_solved, game_ready, source = self.scanner.load_ui()
 
         if not state:
             return
@@ -57,6 +57,8 @@ class MainWindow(QMainWindow):
         self.config_file.setText(state["config_path"])
         self.scanner.load_config(state["config_path"])
         self.issues = state["issues"]
+        self.btn_game_ready.setChecked(game_ready)
+        self.btn_source.setChecked(source)
         self.files_scanned = files_checked
         self.problems_found = issues_found
         self.issues_solved = issues_solved
@@ -122,10 +124,10 @@ class MainWindow(QMainWindow):
         self.btn_source.setCheckable(True)
 
         mode_row = QHBoxLayout()
-        self.mode_group = QButtonGroup()
-        self.mode_group.addButton(self.btn_game_ready)
-        self.mode_group.addButton(self.btn_source)
-        self.mode_group.setExclusive(True)  # only one can be active at a time
+        mode_group = QButtonGroup()
+        mode_group.addButton(self.btn_game_ready)
+        mode_group.addButton(self.btn_source)
+        mode_group.setExclusive(True)  # only one can be active at a time
 
         self.btn_game_ready.setChecked(True)  # default selection
 
@@ -150,6 +152,7 @@ class MainWindow(QMainWindow):
                 color: black;
             }
         """)
+        scan_btn.setMinimumSize(20,30)
         scan_btn.clicked.connect(self.scan_executed)
         main_layout.addWidget(scan_btn)
 
@@ -478,6 +481,8 @@ class MainWindow(QMainWindow):
         self.issues.clear()
         self.issues_solved = 0
 
+        nr_files = 0
+        result = None
         if self.btn_game_ready.isChecked():
             nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
         elif self.btn_source.isChecked():
@@ -589,5 +594,7 @@ class MainWindow(QMainWindow):
             self.issues,
             self.files_scanned,
             self.issues_solved,
+            self.btn_game_ready.isChecked(),
+            self.btn_source.isChecked(),
         )
         event.accept()
