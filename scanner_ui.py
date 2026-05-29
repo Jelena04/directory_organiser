@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
-                               QPushButton, QFrame, QTableWidget, QTableWidgetItem, QFileDialog)
+                               QPushButton, QFrame, QTableWidget, QTableWidgetItem, QFileDialog, QButtonGroup, QSpacerItem)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from scanner_func import Scanner
@@ -17,6 +17,9 @@ class MainWindow(QMainWindow):
 
         self.directory_to_scan = None
         self.config_file = None
+
+        self.game_ready_button = None
+        self.source_button = None
 
         self.files_scanned = 0
         self.problems_found = 0
@@ -71,6 +74,7 @@ class MainWindow(QMainWindow):
         main_container.resize(600, 500)
         self.setCentralWidget(main_container)
         main_layout = QVBoxLayout(main_container)
+        main_layout.setContentsMargins(20, 20, 20, 20)
 
         # to scan row
         to_scan_row = QHBoxLayout()
@@ -108,6 +112,30 @@ class MainWindow(QMainWindow):
         config_row.addWidget(reload_btn)
         main_layout.addLayout(config_row)
 
+        separator = QSpacerItem(20, 20)
+        main_layout.addItem(separator)
+
+        self.btn_game_ready = QPushButton("Game-ready assets")
+        self.btn_source = QPushButton("Source assets")
+
+        self.btn_game_ready.setCheckable(True)
+        self.btn_source.setCheckable(True)
+
+        mode_row = QHBoxLayout()
+        self.mode_group = QButtonGroup()
+        self.mode_group.addButton(self.btn_game_ready)
+        self.mode_group.addButton(self.btn_source)
+        self.mode_group.setExclusive(True)  # only one can be active at a time
+
+        self.btn_game_ready.setChecked(True)  # default selection
+
+        mode_row.addWidget(self.btn_game_ready)
+        mode_row.addWidget(self.btn_source)
+        main_layout.addLayout(mode_row)
+
+        separator = QSpacerItem(20, 20)
+        main_layout.addItem(separator)
+
         # scan button
         scan_btn = QPushButton("Scan")
         scan_btn.setStyleSheet("""
@@ -125,11 +153,8 @@ class MainWindow(QMainWindow):
         scan_btn.clicked.connect(self.scan_executed)
         main_layout.addWidget(scan_btn)
 
-        # separator
-        separator = QFrame()
-        separator.setFrameShape(QFrame.Shape.HLine)
-        separator.setFrameShadow(QFrame.Shadow.Sunken)
-        main_layout.addWidget(separator)
+        separator = QSpacerItem(20, 20)
+        main_layout.addItem(separator)
 
         # cards
         cards_layout = QHBoxLayout()
@@ -213,6 +238,9 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(cards_layout)
         # </editor-fold>
 
+        separator = QSpacerItem(20, 20)
+        main_layout.addItem(separator)
+
         # table
         self.table = QTableWidget()
         self.table.setColumnCount(3)
@@ -225,6 +253,9 @@ class MainWindow(QMainWindow):
         self.table.itemSelectionChanged.connect(self.on_row_selected)
 
         main_layout.addWidget(self.table)
+
+        separator = QSpacerItem(20, 20)
+        main_layout.addItem(separator)
 
         # bottom btns
         btns_row = QHBoxLayout()

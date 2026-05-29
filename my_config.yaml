@@ -1,28 +1,47 @@
-folders:
-  M_: Materials
-  SKM_: Meshes\Skeletal
-  SM_: Meshes
-  T_: Textures
-naming:
-  prefixes:
-    material: M_
-    skeletal_mesh: SKM_
-    static_mesh: SM_
-    texture: T_
-  suffixes:
-    static_mesh:
-    skeletal_mesh:
-    base_color: _BC
-    metalness: _M
-    normal: _N
-    roughness: _R
-textures:
-  max_resolution: 512
-  require_power_of_two: true
-allowed_formats:
-  - .png
-  - .tga
-  - .fbx
-  - .abc
-  - .wav
-max_file_size_mb: 50
+game_ready:
+  folders:
+    M_: Materials
+    SKM_: Meshes\Skeletal
+    SM_: Meshes
+    T_: Textures
+  naming:
+    prefixes:
+      material: M_
+      skeletal_mesh: SKM_
+      static_mesh: SM_
+      texture: T_
+    suffixes:
+      static_mesh:
+      skeletal_mesh:
+      base_color: _BC
+      metalness: _M
+      normal: _N
+      roughness: _R
+  textures:
+    max_resolution: 512
+    require_power_of_two: true
+  allowed_formats:
+    - .png
+    - .tga
+    - .fbx
+    - .abc
+    - .wav
+  max_file_size_mb: 50
+source:
+  naming:
+    pattern: '^[a-z0-9]+(_[a-z0-9]+)*_v\d{2}$'
+    banned_words:
+      - final
+      - new
+      - copy
+      - test
+      - old
+      - fixed
+      - revised
+  allowed_formats:
+    - .blend
+    - .ma
+    - .psd
+    - .spp
+    - .zpr
+    - .rpp
