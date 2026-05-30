@@ -163,7 +163,7 @@ class Scanner:
         :param root: Root of file to be checked
         :return: Issue object is no valid prefix is found, otherwise None
         """
-        if not any(file.startswith(prefix) for prefix in self.correct_suffixes):
+        if not any(file.endswith(suffix) for suffix in self.correct_suffixes):
             return Issue(file, os.path.join(root, file), "Suffix",
                          f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
         return None
@@ -229,6 +229,8 @@ class Scanner:
         try:
             with Image.open(filepath) as img:
                 img.verify()
+            with Image.open(filepath) as img:
+                img.load()
             return True
         except Exception:
             return False
@@ -241,20 +243,23 @@ class Scanner:
         :param root: Root of file to be checked
         :return: Issue object if any requirement is violated, otherwise None
         """
-        with Image.open(os.path.join(root, file)) as image:
-            width, height = image.size
+        try:
+            with Image.open(os.path.join(root, file)) as image:
+                width, height = image.size
 
-            if self.config["game_ready"]["textures"]["require_power_of_two"]:
-                if not width == height:
-                    return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height} is not power of two")
+                if self.config["game_ready"]["textures"]["require_power_of_two"]:
+                    if not width == height:
+                        return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height} is not power of two")
 
-            max_res = self.config["game_ready"]["textures"]["max_resolution"]
-            if width > max_res and height > max_res:
-                return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height}px is bigger than max resolution: {max_res}px")
-            elif width > max_res:
-                return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}px")
-            elif height > max_res:
-                return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}px")
+                max_res = self.config["game_ready"]["textures"]["max_resolution"]
+                if width > max_res and height > max_res:
+                    return Issue(file, os.path.join(root, file), "Image size",f"{width}x{height}px is bigger than max resolution: {max_res}px")
+                elif width > max_res:
+                    return Issue(file, os.path.join(root, file), "Image size", f"{width}px (width) is bigger than max resolution: {max_res}px")
+                elif height > max_res:
+                    return Issue(file, os.path.join(root, file), "Image size",f"{height}px (height) is bigger than max resolution: {max_res}px")
+        except Exception as e:
+            return Issue(file, os.path.join(root, file), "Image", f"Cannot read image: {str(e)}")
 
     def open_in_explorer(self, files):
         """
@@ -295,7 +300,7 @@ class Scanner:
 
             if not ok or not new_name:
                 return False
-            if not any(new_name.startswith(suffix) for suffix in known_suffixes):
+            if not any(new_name.endswith(suffix) for suffix in known_suffixes):
                 QMessageBox.warning(None, "Wrong suffix",
                                     f"{new_name} does not have an allowed suffix. Allowed suffixes: {', '.join(known_suffixes)}")
                 return self.rename_file(issue)
@@ -310,7 +315,14 @@ class Scanner:
                 return self.rename_file(issue)
 
         new_path = os.path.join(dir, f"{new_name}{extension}")
-        os.rename(issue.filepath, new_path)
+        try:
+            os.rename(issue.filepath, new_path)
+        except PermissionError:
+            QMessageBox.warning(None, "Permission Denied", "File is in use by another program. Close it and try again.")
+            return False
+        except OSError as e:
+            QMessageBox.warning(None, "Error", f"Culd not rename file: {str(e)}")
+            return False
         issue.filepath = new_path
         issue.filename = f"{new_name}{extension}"
         return True
@@ -329,6 +341,9 @@ class Scanner:
         filepath = issue.filepath
         folder_map = self.config["game_ready"]["folders"]
         prefix = issue.filename.split("_")[0] + "_"
+        if prefix not in folder_map:
+            QMessageBox.warning(None, "Config Error", f"Prefix '{prefix}' not found in config folder mapping. Please rename this file first.")
+            return False
         correct_folder = folder_map[prefix]
         correct_folder_path = os.path.normpath(os.path.join(scan_directory, correct_folder))
 
@@ -341,7 +356,11 @@ class Scanner:
                 return False
 
         destination_path = os.path.join(correct_folder_path, issue.filename)
-        os.rename(filepath, destination_path)
+        reply = QMessageBox.question(None, "Move file", f"Do you with to move the file to {destination_path}?")
+        if reply == QMessageBox.StandardButton.Yes:
+            os.rename(filepath, destination_path)
+        else:
+            return False
         return True
 
     def delete_files(self, issue):

@@ -53,9 +53,12 @@ class MainWindow(QMainWindow):
         if not state:
             return
 
+        error = self.scanner.load_config(state["config_path"])
+        if error:
+            return
+
         self.directory_to_scan.setText(state["directory"])
         self.config_file.setText(state["config_path"])
-        self.scanner.load_config(state["config_path"])
         self.issues = state["issues"]
         self.btn_game_ready.setChecked(game_ready)
         self.btn_source.setChecked(source)
@@ -122,14 +125,16 @@ class MainWindow(QMainWindow):
 
         self.btn_game_ready.setCheckable(True)
         self.btn_source.setCheckable(True)
+        # self.btn_source.clicked.connect(lambda : print("Source clicked"))
 
         mode_row = QHBoxLayout()
-        mode_group = QButtonGroup()
-        mode_group.addButton(self.btn_game_ready)
-        mode_group.addButton(self.btn_source)
-        mode_group.setExclusive(True)  # only one can be active at a time
+        self.mode_group = QButtonGroup()
+        self.mode_group.addButton(self.btn_game_ready)
+        self.mode_group.addButton(self.btn_source)
+        self.mode_group.setExclusive(True)  # only one can be active at a time
 
-        self.btn_game_ready.setChecked(True)  # default selection
+        # self.btn_game_ready.setChecked(True)  # default selection
+        # self.btn_game_ready.clicked.connect(lambda : print("Game Ready clicked"))
 
         mode_row.addWidget(self.btn_game_ready)
         mode_row.addWidget(self.btn_source)
@@ -408,6 +413,9 @@ class MainWindow(QMainWindow):
             msg.setWindowTitle("Error loading config")
             msg.setText(error)
             msg.exec()
+        self.scanner.config = None
+        self.btn_game_ready.setChecked(True)
+        self.btn_source.setChecked(False)
 
     def insert_issue_row(self, filename, issue, info):
         """
@@ -483,6 +491,7 @@ class MainWindow(QMainWindow):
 
         nr_files = 0
         result = None
+
         if self.btn_game_ready.isChecked():
             nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
         elif self.btn_source.isChecked():
@@ -553,7 +562,7 @@ class MainWindow(QMainWindow):
             return
 
         rows = self.table.selectionModel().selectedRows()
-        for row in rows:
+        for row in reversed(rows):
             row_nr = row.row()
             self.table.removeRow(row_nr)
             self.issues.pop(row_nr)
@@ -565,9 +574,11 @@ class MainWindow(QMainWindow):
         """
         selected_rows = self.table.selectionModel().selectedRows()
 
-        for row in selected_rows:
+        for row in reversed(selected_rows):
             row_nr = row.row()
-            self.scanner.delete_files(self.issues[row_nr])
+            success = self.scanner.delete_files(self.issues[row_nr])
+            if success:
+                self.remove_row_on_success(row_nr)
 
 
     def remove_row_on_success(self, row):
