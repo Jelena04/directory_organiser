@@ -75,11 +75,15 @@ class MainWindow(QMainWindow):
         Build and lay out all UI elements: input rows, scan button, stat cards, the issue table, and the bottom action
         buttons.
         """
+
         main_container = QWidget()
         main_container.resize(600, 500)
         self.setCentralWidget(main_container)
         main_layout = QVBoxLayout(main_container)
         main_layout.setContentsMargins(20, 20, 20, 20)
+
+        with open("styles.qss", "r") as f:
+            self.setStyleSheet(f.read())
 
         # to scan row
         to_scan_row = QHBoxLayout()
@@ -125,16 +129,12 @@ class MainWindow(QMainWindow):
 
         self.btn_game_ready.setCheckable(True)
         self.btn_source.setCheckable(True)
-        # self.btn_source.clicked.connect(lambda : print("Source clicked"))
 
         mode_row = QHBoxLayout()
         self.mode_group = QButtonGroup()
         self.mode_group.addButton(self.btn_game_ready)
         self.mode_group.addButton(self.btn_source)
-        self.mode_group.setExclusive(True)  # only one can be active at a time
-
-        # self.btn_game_ready.setChecked(True)  # default selection
-        # self.btn_game_ready.clicked.connect(lambda : print("Game Ready clicked"))
+        self.mode_group.setExclusive(True)
 
         mode_row.addWidget(self.btn_game_ready)
         mode_row.addWidget(self.btn_source)
@@ -145,18 +145,7 @@ class MainWindow(QMainWindow):
 
         # scan button
         scan_btn = QPushButton("Scan")
-        scan_btn.setStyleSheet("""
-            QPushButton:enabled {
-                background-color: #8998c7;
-                color: black;
-                border: 1px solid #727ea6;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #727ea6;
-                color: black;
-            }
-        """)
+        scan_btn.setObjectName("scanButton")
         scan_btn.setMinimumSize(20,30)
         scan_btn.clicked.connect(self.scan_executed)
         main_layout.addWidget(scan_btn)
@@ -169,23 +158,17 @@ class MainWindow(QMainWindow):
 
         # <editor-fold desc="Files Scanned Card">
         files_scanned = QWidget()
-        files_scanned.setStyleSheet("""
-                    background-color: #dee3f3;
-                    border: 1px solid #979add;
-                    border-radius: 8px;
-                """)
+        files_scanned.setObjectName("scannedCard")
         card_layout = QVBoxLayout(files_scanned)
         card_layout.setContentsMargins(12, 10, 12, 10)
         card_layout.setSpacing(4)
 
         label = QLabel("FILES SCANNED")
+        label.setObjectName("scannedTitle")
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("font-size: 11px; color: #0a1350; background: transparent; border: none;")
-
         self.label_scanned_files = QLabel(str(self.files_scanned))
         self.label_scanned_files.setAlignment(Qt.AlignCenter)
-        self.label_scanned_files.setStyleSheet(
-            "font-size: 28px; font-weight: 500; color: #0a1350; background: transparent; border: none;")
+        self.label_scanned_files.setObjectName("scannedAmount")
 
         card_layout.addWidget(label)
         card_layout.addWidget(self.label_scanned_files)
@@ -195,23 +178,17 @@ class MainWindow(QMainWindow):
 
         # <editor-fold desc="Issues Found Card">
         files_scanned = QWidget()
-        files_scanned.setStyleSheet("""
-                    background-color: #f3e6de;
-                    border: 1px solid #ddad97;
-                    border-radius: 8px;
-                """)
+        files_scanned.setObjectName("issuesCard")
         card_layout = QVBoxLayout(files_scanned)
         card_layout.setContentsMargins(12, 10, 12, 10)
         card_layout.setSpacing(4)
 
         label = QLabel("ISSUES FOUND")
+        label.setObjectName("issuesTitle")
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("font-size: 11px; color: #50180a; background: transparent; border: none;")
-
         self.label_issues_found = QLabel(str(self.problems_found))
+        self.label_issues_found.setObjectName("issuesAmount")
         self.label_issues_found.setAlignment(Qt.AlignCenter)
-        self.label_issues_found.setStyleSheet(
-            "font-size: 28px; font-weight: 500; color: #50180a; background: transparent; border: none;")
 
         card_layout.addWidget(label)
         card_layout.addWidget(self.label_issues_found)
@@ -221,24 +198,18 @@ class MainWindow(QMainWindow):
 
         # <editor-fold desc="Issues Solved Card">
         files_scanned = QWidget()
-        files_scanned.setStyleSheet("""
-            background-color: #EAF3DE;
-            border: 1px solid #C0DD97;
-            border-radius: 8px;
-        """)
+        files_scanned.setObjectName("solvedCard")
         card_layout = QVBoxLayout(files_scanned)
         card_layout.setContentsMargins(12, 10, 12, 10)
         card_layout.setSpacing(4)
 
         label = QLabel("ISSUES SOLVED")
+        label.setObjectName("solvedTitle")
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("font-size: 11px; color: #3B6D11; background: transparent; border: none;")
 
         self.label_issues_solved = QLabel(str(self.issues_solved))
+        self.label_issues_solved.setObjectName("solvedAmount")
         self.label_issues_solved.setAlignment(Qt.AlignCenter)
-        self.label_issues_solved.setStyleSheet(
-            "font-size: 28px; font-weight: 500; color: #27500A; background: transparent; border: none;")
-
         card_layout.addWidget(label)
         card_layout.addWidget(self.label_issues_solved)
 
@@ -268,115 +239,120 @@ class MainWindow(QMainWindow):
         # bottom btns
         btns_row = QHBoxLayout()
         self.rename_btn = QPushButton("Rename")
+        self.rename_btn.setObjectName("renameButton")
         self.rename_btn.clicked.connect(self.rename_pressed)
         self.rename_btn.setEnabled(False)
-        self.rename_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #2b2b2b;
-                color: #888888;
-                border: 1px solid #3a3a3a;
-                border-radius: 4px;
-                padding: 4px 8px;
-            }
-            QPushButton:enabled {
-                background-color: #EAF3DE;
-                color: #27500A;
-                border: 1px solid #C0DD97;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #C0DD97;
-                color: #27500A;
-            }
-        """)
+        # self.rename_btn.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: #2b2b2b;
+        #         color: #888888;
+        #         border: 1px solid #3a3a3a;
+        #         border-radius: 4px;
+        #         padding: 4px 8px;
+        #     }
+        #     QPushButton:enabled {
+        #         background-color: #EAF3DE;
+        #         color: #27500A;
+        #         border: 1px solid #C0DD97;
+        #         border-radius: 4px;
+        #     }
+        #     QPushButton:enabled:hover {
+        #         background-color: #C0DD97;
+        #         color: #27500A;
+        #     }
+        # """)
 
         self.move_btn = QPushButton("Move")
+        self.move_btn.setObjectName("moveButton")
         self.move_btn.clicked.connect(self.move_pressed)
         self.move_btn.setEnabled(False)
-        self.move_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #2b2b2b;
-                color: #888888;
-                border: 1px solid #3a3a3a;
-                border-radius: 4px;
-                padding: 4px 8px;
-            }
-            QPushButton:enabled {
-                background-color: #EAF3DE;
-                color: #27500A;
-                border: 1px solid #C0DD97;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #C0DD97;
-                color: #27500A;
-            }
-        """)
+        # self.move_btn.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: #2b2b2b;
+        #         color: #888888;
+        #         border: 1px solid #3a3a3a;
+        #         border-radius: 4px;
+        #         padding: 4px 8px;
+        #     }
+        #     QPushButton:enabled {
+        #         background-color: #EAF3DE;
+        #         color: #27500A;
+        #         border: 1px solid #C0DD97;
+        #         border-radius: 4px;
+        #     }
+        #     QPushButton:enabled:hover {
+        #         background-color: #C0DD97;
+        #         color: #27500A;
+        #     }
+        # """)
 
         self.delete_btn = QPushButton("Delete")
+        self.delete_btn.setObjectName("deleteButton")
         self.delete_btn.clicked.connect(self.delete_pressed)
-        self.delete_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #d0d0d0;
-                color: #888888;
-                border: 1px solid #b0b0b0;
-                border-radius: 4px;
-                padding: 4px 8px;
-            }
-            QPushButton:enabled {
-                background-color: #f3e6de;
-                color: #50180a;
-                border: 1px solid #ddad97;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #ddad97;
-                color: #50180a;
-            }
-        """)
+        # self.delete_btn.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: #d0d0d0;
+        #         color: #888888;
+        #         border: 1px solid #b0b0b0;
+        #         border-radius: 4px;
+        #         padding: 4px 8px;
+        #     }
+        #     QPushButton:enabled {
+        #         background-color: #f3e6de;
+        #         color: #50180a;
+        #         border: 1px solid #ddad97;
+        #         border-radius: 4px;
+        #     }
+        #     QPushButton:enabled:hover {
+        #         background-color: #ddad97;
+        #         color: #50180a;
+        #     }
+        # """)
 
         self.ignore_btn = QPushButton("Ignore")
+        self.ignore_btn.setObjectName("ignoreButton")
         self.ignore_btn.clicked.connect(self.ignore_pressed)
-        self.ignore_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #d0d0d0;
-                color: #888888;
-                border: 1px solid #b0b0b0;
-                border-radius: 4px;
-                padding: 4px 8px;
-            }
-            QPushButton:enabled {
-                background-color: #f3f0de;
-                color: #4a3a0a;
-                border: 1px solid #ddd097;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #ddd097;
-                color: #4a3a0a;
-            }
-        """)
+        # self.ignore_btn.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: #d0d0d0;
+        #         color: #888888;
+        #         border: 1px solid #b0b0b0;
+        #         border-radius: 4px;
+        #         padding: 4px 8px;
+        #     }
+        #     QPushButton:enabled {
+        #         background-color: #f3f0de;
+        #         color: #4a3a0a;
+        #         border: 1px solid #ddd097;
+        #         border-radius: 4px;
+        #     }
+        #     QPushButton:enabled:hover {
+        #         background-color: #ddd097;
+        #         color: #4a3a0a;
+        #     }
+        # """)
 
         self.explorer_btn = QPushButton("Open in Explorer")
-        self.explorer_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #d0d0d0;
-                color: #888888;
-                border: 1px solid #b0b0b0;
-                border-radius: 4px;
-                padding: 4px 8px;
-            }
-            QPushButton:enabled {
-                background-color: #2b2b2b;
-                color: white;
-                border: 1px solid #3a3a3a;
-                border-radius: 4px;
-            }
-            QPushButton:enabled:hover {
-                background-color: #313131;
-                color: white;
-            }
-        """)
+        self.explorer_btn.setObjectName("explorerButton")
+        # self.explorer_btn.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: #d0d0d0;
+        #         color: #888888;
+        #         border: 1px solid #b0b0b0;
+        #         border-radius: 4px;
+        #         padding: 4px 8px;
+        #     }
+        #     QPushButton:enabled {
+        #         background-color: #2b2b2b;
+        #         color: white;
+        #         border: 1px solid #3a3a3a;
+        #         border-radius: 4px;
+        #     }
+        #     QPushButton:enabled:hover {
+        #         background-color: #313131;
+        #         color: white;
+        #     }
+        # """)
         self.explorer_btn.clicked.connect(self.explorer_pressed)
 
         btns_row.addWidget(self.explorer_btn)
@@ -580,7 +556,6 @@ class MainWindow(QMainWindow):
             if success:
                 self.remove_row_on_success(row_nr)
 
-
     def remove_row_on_success(self, row):
         """
         Remove a row from the table and issue list after a successful action, update the issue counters, and refresh
@@ -593,7 +568,6 @@ class MainWindow(QMainWindow):
         self.problems_found -= 1
         self.reload_result_row()
         self.update_btns()
-
 
     def closeEvent(self, event):
         """

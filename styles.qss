@@ -1,0 +1,173 @@
+#scanButton:enabled {
+    background-color: #8998c7;
+    color: black;
+    border: 1px solid #727ea6;
+    border-radius: 4px;
+}
+
+#scanButton:enabled:hover {
+    background-color: #727ea6
+}
+
+#scannedCard {
+    background-color: #dee3f3;
+    border: 1px solid #979add;
+    border-radius: 8px;
+}
+
+#scannedTitle {
+    font-size: 11px;
+    color: #0a1350;
+    background: transparent;
+    border: none;
+}
+
+#scannedAmount {
+    font-size: 28px;
+    font-weight: 500;
+    color: #0a1350;
+    background: transparent;
+    border: none;
+}
+
+#issuesCard {
+    background-color: #f3e6de;
+    border: 1px solid #ddad97;
+    border-radius: 8px;
+}
+
+#issuesTitle {
+    font-size: 11px;
+    color: #50180a;
+    background: transparent;
+    border: none;
+}
+
+#issuesAmount {
+    font-size: 28px;
+    font-weight: 500;
+    color: #50180a;
+    background: transparent;
+    border: none;
+}
+
+#solvedCard {
+    background-color: #EAF3DE;
+    border: 1px solid #C0DD97;
+    border-radius: 8px;
+}
+
+#solvedTitle {
+    font-size: 11px;
+    color: #3B6D11;
+    background: transparent;
+    border: none;
+}
+
+#solvedAmount {
+    font-size: 28px;
+    font-weight: 500;
+    color: #27500A;
+    background: transparent;
+    border: none;
+}
+
+#renameButton {
+    background-color: #2b2b2b;
+    color: #888888;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+#renameButton:enabled {
+    background-color: #EAF3DE;
+    color: #27500A;
+    border: 1px solid #C0DD97;
+    border-radius: 4px;
+}
+
+#renameButton:enabled:hover {
+    background-color: #C0DD97;
+    color: #27500A;
+}
+
+#moveButton {
+    background-color: #2b2b2b;
+    color: #888888;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+#moveButton:enabled {
+    background-color: #EAF3DE;
+    color: #27500A;
+    border: 1px solid #C0DD97;
+    border-radius: 4px;
+}
+
+#moveButton:enabled:hover {
+    background-color: #C0DD97;
+    color: #27500A;
+}
+
+#deleteButton {
+    background-color: #d0d0d0;
+    color: #888888;
+    border: 1px solid #b0b0b0;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+#deleteButton:enabled {
+    background-color: #f3e6de;
+    color: #50180a;
+    border: 1px solid #ddad97;
+    border-radius: 4px;
+}
+
+#deleteButton:enabled:hover {
+    background-color: #ddad97;
+    color: #50180a;
+}
+
+#ignoreButton {
+    background-color: #d0d0d0;
+    color: #888888;
+    border: 1px solid #b0b0b0;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+#ignoreButton:enabled {
+    background-color: #f3f0de;
+    color: #4a3a0a;
+    border: 1px solid #ddd097;
+    border-radius: 4px;
+}
+
+#ignoreButton:enabled:hover {
+    background-color: #ddd097;
+    color: #4a3a0a;
+}
+
+#explorerButton {
+    background-color: #d0d0d0;
+    color: #888888;
+    border: 1px solid #b0b0b0;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+#explorerButton:enabled {
+    background-color: #2b2b2b;
+    color: white;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+}
+
+#explorerButton:enabled:hover {
+    background-color: #313131;
+    color: white;
+}
