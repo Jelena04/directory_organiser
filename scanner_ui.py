@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(main_container)
         main_layout.setContentsMargins(20, 20, 20, 20)
 
-        with open("styles.qss", "r") as f:
+        with open("content/styles.qss", "r") as f:
             self.setStyleSheet(f.read())
 
         # to scan row
@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
         browse_button_config = QPushButton("Browse")
         browse_button_config.clicked.connect(self.pick_config_file)
         reload_btn = QPushButton()
-        reload_btn.setIcon(QIcon("reload_icon.png"))
+        reload_btn.setIcon(QIcon("content/reload_icon.png"))
         reload_btn.setFixedWidth(50)
         reload_btn.clicked.connect(self.reload_config)
 
