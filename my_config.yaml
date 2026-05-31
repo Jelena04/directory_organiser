@@ -18,7 +18,7 @@ game_ready:
       normal: _N
       roughness: _R
   textures:
-    max_resolution: 512
+    max_resolution: 1024
     require_power_of_two: true
   allowed_formats:
     - .png

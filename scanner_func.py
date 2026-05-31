@@ -14,6 +14,8 @@ class Scanner:
 
         self.correct_prefixes = None
         self.correct_suffixes = None
+        self.empty_prefix_allowed = None
+        self.empty_suffix_allowed = False
 
         self.regex_pattern = None
         self.banned_words = None
@@ -58,8 +60,14 @@ class Scanner:
                 self.config = yaml.safe_load(file)
                 self.config_path = config_filepath
 
-                self.correct_prefixes = [key if key else "" for key in self.config["game_ready"]["naming"]["prefixes"].values()]
-                self.correct_suffixes = [key if key else "" for key in self.config["game_ready"]["naming"]["suffixes"].values()]
+                self.correct_prefixes = [key for key in self.config["game_ready"]["naming"]["prefixes"].values() if key]
+                self.correct_suffixes = [key for key in self.config["game_ready"]["naming"]["suffixes"].values() if key]
+                # self.empty_prefix_allowed = any(key is None or key == "" for key in self.config["game_ready"]["naming"]["prefixes"].values())
+                # self.empty_suffix_allowed = any(key is None or key == "" for key in self.config["game_ready"]["naming"]["suffixes"].values())
+                self.empty_prefix_allowed = any(
+                    key is None or key == "" for key in self.config["game_ready"]["naming"]["prefixes"].values())
+                self.empty_suffix_allowed = any(
+                    key is None or key == "" for key in self.config["game_ready"]["naming"]["suffixes"].values())
 
                 pattern = self.config["source"]["naming"]["pattern"]
                 self.regex_pattern = re.compile(pattern)
@@ -151,10 +159,18 @@ class Scanner:
         :param root: Root of file to be checked
         :return: Issue object is no valid prefix is found, otherwise None
         """
-        if not any(file.startswith(prefix) for prefix in self.correct_prefixes):
-            return Issue(file, os.path.join(root, file), "Prefix",
-                         f"No valid prefix found — expected one of: {', '.join(self.correct_prefixes)}")
-        return None
+        basename = os.path.splitext(file)[0]
+
+        if any(basename.startswith(prefix) for prefix in self.correct_prefixes):
+            return None
+
+        if self.empty_prefix_allowed:
+            if not re.search(r"_[A-Za-z0-9]+$", basename):
+                return None
+
+        return Issue(file, os.path.join(root, file),
+                     "Prefix", f"No valid prefix found — expected one of: {', '.join(self.correct_prefixes)}")
+
 
     def check_suffix(self, file, root):
         """
@@ -163,10 +179,19 @@ class Scanner:
         :param root: Root of file to be checked
         :return: Issue object is no valid prefix is found, otherwise None
         """
-        if not any(file.endswith(suffix) for suffix in self.correct_suffixes):
-            return Issue(file, os.path.join(root, file), "Suffix",
-                         f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
-        return None
+        basename = os.path.splitext(file)[0]
+
+        if any(basename.endswith(suffix) for suffix in self.correct_suffixes):
+            return None
+
+        if self.empty_suffix_allowed:
+            # Strip whatever prefix-shaped chunk is at the start (valid or not)
+            stem = re.sub(r"^[A-Za-z]+_", "", basename)
+            if not re.search(r"_[A-Za-z0-9]+$", stem):
+                return None
+
+        return Issue(file, os.path.join(root, file),"Suffix",f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
+
 
     def check_source_naming(self, file, root):
         basename, extension = os.path.splitext(file)

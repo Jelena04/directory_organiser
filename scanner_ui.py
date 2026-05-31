@@ -125,7 +125,9 @@ class MainWindow(QMainWindow):
         main_layout.addItem(separator)
 
         self.btn_game_ready = QPushButton("Game-ready assets")
+        self.btn_game_ready.setObjectName("gameReadyButton")
         self.btn_source = QPushButton("Source assets")
+        self.btn_source.setObjectName("sourceButton")
 
         self.btn_game_ready.setCheckable(True)
         self.btn_source.setCheckable(True)

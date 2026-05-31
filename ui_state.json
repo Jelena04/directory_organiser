@@ -3,27 +3,135 @@
   "config_path": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_DirectoryOrganiser/my_config.yaml",
   "game_ready": true,
   "source": false,
-  "files_checked": 8,
-  "issues_found": 3,
+  "files_checked": 19,
+  "issues_found": 21,
   "issues_solved": 0,
   "issues": [
     {
-      "filename": "S_Flower01.fbx",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\S_Flower01.fbx",
+      "filename": "ArrowSign.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\ArrowSign.fbx",
       "issue": "Prefix",
-      "info": "No valid prefix found \u2014 expected one of: M_, SKM_, SM_, T_"
+      "info": "No valid suffix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "Grass01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\Grass01.fbx",
+      "issue": "Prefix",
+      "info": "No valid suffix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "SKM_Pillbug.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SKM_Pillbug.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SKM_Pillbug.fbx",
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory_GameReady\\Meshes\\SKM_Pillbug.fbx",
+      "issue": "Folder location",
+      "info": "'SKM_' files should be in 'Meshes\\Skeletal'"
+    },
+    {
+      "filename": "SM_BigLeaf02.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SM_BigLeaf02.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_Flower01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SM_Flower01.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_FullBush02.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SM_FullBush02.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_Mushroom01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SM_Mushroom01.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_Mushroom02_finalmesh.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\SM_Mushroom02_finalmesh.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "StatMesh_BigLeaf01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\StatMesh_BigLeaf01.fbx",
+      "issue": "Prefix",
+      "info": "No valid suffix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "StatMesh_BigLeaf01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\StatMesh_BigLeaf01.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "T_Foliage_BC.png",
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory_GameReady\\Meshes\\T_Foliage_BC.png",
+      "issue": "Folder location",
+      "info": "'T_' files should be in 'Textures'"
+    },
+    {
+      "filename": "T_Foliage_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Meshes\\T_Foliage_BC.png",
+      "issue": "Image size",
+      "info": "2048x2048px is bigger than max resolution: 1024px"
     },
     {
       "filename": "T_Pillbug_1_BC.png",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\T_Pillbug_1_BC.png",
-      "issue": "Image size",
-      "info": "1024x1024px is bigger than max resolution: 512px"
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory_GameReady\\Meshes\\T_Pillbug_1_BC.png",
+      "issue": "Folder location",
+      "info": "'T_' files should be in 'Textures'"
     },
     {
-      "filename": "T_Pillbug_2_BC.png",
-      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\T_Pillbug_2_BC.png",
+      "filename": "Pillbug_3_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\Pillbug_3_BC.png",
+      "issue": "Prefix",
+      "info": "No valid suffix found \u2014 expected one of: M_, SKM_, SM_, T_"
+    },
+    {
+      "filename": "SM_FullBush01.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\SM_FullBush01.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_FullBush01.fbx",
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory_GameReady\\Textures\\SM_FullBush01.fbx",
+      "issue": "Folder location",
+      "info": "'SM_' files should be in 'Meshes'"
+    },
+    {
+      "filename": "SM_Grass02.fbx",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\SM_Grass02.fbx",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "SM_Grass02.fbx",
+      "filepath": "C:\\Users\\jelen\\Documents\\Howest - DAE\\second_year_part_2\\portfolio\\exam_project\\B_TestDirectory_GameReady\\Textures\\SM_Grass02.fbx",
+      "issue": "Folder location",
+      "info": "'SM_' files should be in 'Meshes'"
+    },
+    {
+      "filename": "T_Pillbug_2.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\T_Pillbug_2.png",
+      "issue": "Suffix",
+      "info": "No valid suffix found \u2014 expected one of: _BC, _M, _N, _R"
+    },
+    {
+      "filename": "T_Pillbug_7_BC.png",
+      "filepath": "C:/Users/jelen/Documents/Howest - DAE/second_year_part_2/portfolio/exam_project/B_TestDirectory_GameReady\\Textures\\T_Pillbug_7_BC.png",
       "issue": "Image size",
-      "info": "1024x1024px is bigger than max resolution: 512px"
+      "info": "2048x2048px is bigger than max resolution: 1024px"
     }
   ]
 }
