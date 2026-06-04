@@ -22,7 +22,7 @@ class ReportGenerator:
 
         html = template.render(date_time=self.date_time, mode=self.mode, config=self.config, stats=self.stats, pass_rate=pass_rate, issues=self.issues)
 
-        with open("report_output/report.html", "w") as f:
+        with open("report_output/report.html", "w", encoding="utf-8") as f:
             f.write(html)
 
     def calc_pass_rate(self):

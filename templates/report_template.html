@@ -78,19 +78,22 @@
         </div>
     </div>
 
-    <table class="tablecard">
-        <tr class="tableheader">
-            <th style="width: 30%">File</th>
-            <th style="width: 20%">Issue</th>
-            <th style="width: 50%">Info</th>
-        </tr>
-            {% for issue in issues %}
-            <tr class="tablerow">
-                <td style="font-family: Consolas">{{issue.filename}}</td>
-                <td style="color: var(--issue-color-{{ type_colors[issue.issue] }})">{{ issue.issue }}</td>
-                <td>{{issue.info}}</td>
+    <div class="tablecard">
+        <table class="table">
+            <tr class="tableheader">
+                <th style="width: 30%">File</th>
+                <th style="width: 20%">Issue</th>
+                <th style="width: 50%">Info</th>
             </tr>
-            {% endfor %}
+                {% for issue in issues %}
+                <tr class="tablerow">
+                    <td style="font-family: Consolas">{{issue.filename}}</td>
+                    <td style="color: var(--issue-color-{{ type_colors[issue.issue] }})">{{ issue.issue }}</td>
+                    <td>{{issue.info}}</td>
+                </tr>
+                {% endfor %}
     </table>
+    </div>
+
 </body>
 </html>
