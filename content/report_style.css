@@ -3,3 +3,11 @@ body {
     color: white;
 }
 
+.bar-bg {
+    background:#ddd;
+    width:200px; }
+
+.bar-fill {
+    background:#e05;
+    height:20px;
+    width: var(--w); }

@@ -21,8 +21,6 @@ class Scanner:
         self.regex_pattern = None
         self.banned_words = None
 
-        self.scan_date_time = None
-
     def load_ui(self):
         """
         Load the previously saved UI state from 'ui_state.json',
@@ -38,6 +36,7 @@ class Scanner:
         game_ready = state["game_ready"]
         source = state["source"]
         generate_report = state["report"]
+        date_time_scanned = state["date_time_scanned"]
         files_scanned = state["files_checked"]
         issues_found = state["issues_found"]
         issues_solved = state["issues_solved"]
@@ -45,7 +44,7 @@ class Scanner:
             Issue(i["filename"], i["filepath"], i["issue"], i["info"])
             for i in state["issues"]
         ]
-        return state, files_scanned, issues_found, issues_solved, game_ready, source, generate_report
+        return state, files_scanned, issues_found, issues_solved, game_ready, source, generate_report, date_time_scanned
 
     def load_config(self, config_filepath):
         """
@@ -97,9 +96,8 @@ class Scanner:
         if not os.path.exists(self.config_path):
             return 0, "Given config file path doesn't exist"
 
-        self.scan_date_time = datetime.datetime.now()
-        self.scan_date_time = self.scan_date_time.strftime("%A, %B %d, %Y at %H:%M:%S")
-        print(self.scan_date_time)
+        scan_date_time = datetime.datetime.now()
+        scan_date_time = scan_date_time.strftime("%A, %B %d, %Y at %H:%M:%S")
 
         issues = []
         allowed_formats = self.config[mode]["allowed_formats"]
@@ -139,7 +137,7 @@ class Scanner:
                     if naming_issue:
                         issues.append(naming_issue)
 
-        return nr_files,issues
+        return nr_files,issues, scan_date_time
 
     def check_extension(self, file, allowed_formats, root):
         """
@@ -177,7 +175,6 @@ class Scanner:
         return Issue(file, os.path.join(root, file),
                      "Prefix", f"No valid prefix found — expected one of: {', '.join(self.correct_prefixes)}")
 
-
     def check_suffix(self, file, root):
         """
         Check whether the filename starts with one of the configured valid suffixes.
@@ -197,7 +194,6 @@ class Scanner:
                 return None
 
         return Issue(file, os.path.join(root, file),"Suffix",f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
-
 
     def check_source_naming(self, file, root):
         basename, extension = os.path.splitext(file)
@@ -410,7 +406,7 @@ class Scanner:
         elif answer == QMessageBox.StandardButton.No:
             return False
 
-    def save_ui(self, directory, config_path, issues, files_checked, issues_solved, game_ready, source, generate_report):
+    def save_ui(self, directory, config_path, issues, files_checked, issues_solved, game_ready, source, generate_report, date_time_scanned):
         """
         Serialize and save the current UI state to 'ui_state.json', including the scanned directory, config path, issue
         list, and scan statistics.
@@ -429,6 +425,7 @@ class Scanner:
             "game_ready": game_ready,
             "source": source,
             "report": generate_report,
+            "date_time_scanned": date_time_scanned,
             "files_checked": files_checked,
             "issues_found": len(issues),
             "issues_solved": issues_solved,

@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from scanner_func import Scanner
 from scanner_report import ReportGenerator
+import os
 
 class MainWindow(QMainWindow):
 
@@ -23,6 +24,7 @@ class MainWindow(QMainWindow):
         self.btn_source = None
 
         self.report_btn = None
+        self.date_time = None
 
         self.files_scanned = 0
         self.problems_found = 0
@@ -51,7 +53,7 @@ class MainWindow(QMainWindow):
         Load and apply a previously saved UI state: restores input fields, config, issue list, and scan statistics.
         Repopulates the table.
         """
-        state, files_checked, issues_found, issues_solved, game_ready, source, generate_report = self.scanner.load_ui()
+        state, files_checked, issues_found, issues_solved, game_ready, source, generate_report, date_time_scanned = self.scanner.load_ui()
 
         if not state:
             return
@@ -66,6 +68,7 @@ class MainWindow(QMainWindow):
         self.btn_game_ready.setChecked(game_ready)
         self.btn_source.setChecked(source)
         self.report_btn.setEnabled(generate_report)
+        self.date_time = date_time_scanned
         self.files_scanned = files_checked
         self.problems_found = issues_found
         self.issues_solved = issues_solved
@@ -393,9 +396,9 @@ class MainWindow(QMainWindow):
         result = None
 
         if self.btn_game_ready.isChecked():
-            nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
+            nr_files, result, self.date_time = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
         elif self.btn_source.isChecked():
-            nr_files, result = self.scanner.scan(self.directory_to_scan.text(), "source")
+            nr_files, result, self.date_time = self.scanner.scan(self.directory_to_scan.text(), "source")
 
         if type(result) == str:
             QMessageBox.warning(None, "Error reading file path", result)
@@ -410,7 +413,11 @@ class MainWindow(QMainWindow):
                 self.insert_issue_row(issue.filename, issue.issue, issue.info)
 
     def report_btn_pressed(self):
-        report_generator = ReportGenerator(None, None, None)
+        mode = "Game Ready Mode" if self.btn_game_ready.isChecked() else "Source Mode"
+        config = os.path.basename(self.config_file.text())
+        stats = {"files_scanned": self.files_scanned, "problems_found": self.problems_found, "issues_solved": self.issues_solved}
+
+        report_generator = ReportGenerator(self.issues, stats, config, self.date_time, mode)
         report_generator.generate()
 
     def reload_result_row(self):
@@ -509,6 +516,7 @@ class MainWindow(QMainWindow):
             self.issues_solved,
             self.btn_game_ready.isChecked(),
             self.btn_source.isChecked(),
-            self.report_btn.isEnabled()
+            self.report_btn.isEnabled(),
+            self.date_time
         )
         event.accept()
