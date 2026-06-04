@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (QMainWindow,QMessageBox, QLabel, QWidget, QVBoxLa
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from scanner_func import Scanner
+from scanner_report import ReportGenerator
 
 class MainWindow(QMainWindow):
 
@@ -20,6 +21,8 @@ class MainWindow(QMainWindow):
 
         self.btn_game_ready = None
         self.btn_source = None
+
+        self.report_btn = None
 
         self.files_scanned = 0
         self.problems_found = 0
@@ -48,7 +51,7 @@ class MainWindow(QMainWindow):
         Load and apply a previously saved UI state: restores input fields, config, issue list, and scan statistics.
         Repopulates the table.
         """
-        state, files_checked, issues_found, issues_solved, game_ready, source = self.scanner.load_ui()
+        state, files_checked, issues_found, issues_solved, game_ready, source, generate_report = self.scanner.load_ui()
 
         if not state:
             return
@@ -62,6 +65,7 @@ class MainWindow(QMainWindow):
         self.issues = state["issues"]
         self.btn_game_ready.setChecked(game_ready)
         self.btn_source.setChecked(source)
+        self.report_btn.setEnabled(generate_report)
         self.files_scanned = files_checked
         self.problems_found = issues_found
         self.issues_solved = issues_solved
@@ -145,12 +149,23 @@ class MainWindow(QMainWindow):
         separator = QSpacerItem(20, 20)
         main_layout.addItem(separator)
 
+        # scan - report row
+        row = QHBoxLayout()
         # scan button
         scan_btn = QPushButton("Scan")
         scan_btn.setObjectName("scanButton")
         scan_btn.setMinimumSize(20,30)
         scan_btn.clicked.connect(self.scan_executed)
-        main_layout.addWidget(scan_btn)
+        row.addWidget(scan_btn, 3)
+
+        self.report_btn = QPushButton("Generate Report")
+        self.report_btn.setObjectName("reportButton")
+        self.report_btn.setMinimumSize(20, 32)
+        self.report_btn.setEnabled(False)
+        self.report_btn.clicked.connect(self.report_btn_pressed)
+        row.addWidget(self.report_btn, 1)
+
+        main_layout.addLayout(row)
 
         separator = QSpacerItem(20, 20)
         main_layout.addItem(separator)
@@ -244,117 +259,22 @@ class MainWindow(QMainWindow):
         self.rename_btn.setObjectName("renameButton")
         self.rename_btn.clicked.connect(self.rename_pressed)
         self.rename_btn.setEnabled(False)
-        # self.rename_btn.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: #2b2b2b;
-        #         color: #888888;
-        #         border: 1px solid #3a3a3a;
-        #         border-radius: 4px;
-        #         padding: 4px 8px;
-        #     }
-        #     QPushButton:enabled {
-        #         background-color: #EAF3DE;
-        #         color: #27500A;
-        #         border: 1px solid #C0DD97;
-        #         border-radius: 4px;
-        #     }
-        #     QPushButton:enabled:hover {
-        #         background-color: #C0DD97;
-        #         color: #27500A;
-        #     }
-        # """)
 
         self.move_btn = QPushButton("Move")
         self.move_btn.setObjectName("moveButton")
         self.move_btn.clicked.connect(self.move_pressed)
         self.move_btn.setEnabled(False)
-        # self.move_btn.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: #2b2b2b;
-        #         color: #888888;
-        #         border: 1px solid #3a3a3a;
-        #         border-radius: 4px;
-        #         padding: 4px 8px;
-        #     }
-        #     QPushButton:enabled {
-        #         background-color: #EAF3DE;
-        #         color: #27500A;
-        #         border: 1px solid #C0DD97;
-        #         border-radius: 4px;
-        #     }
-        #     QPushButton:enabled:hover {
-        #         background-color: #C0DD97;
-        #         color: #27500A;
-        #     }
-        # """)
 
         self.delete_btn = QPushButton("Delete")
         self.delete_btn.setObjectName("deleteButton")
         self.delete_btn.clicked.connect(self.delete_pressed)
-        # self.delete_btn.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: #d0d0d0;
-        #         color: #888888;
-        #         border: 1px solid #b0b0b0;
-        #         border-radius: 4px;
-        #         padding: 4px 8px;
-        #     }
-        #     QPushButton:enabled {
-        #         background-color: #f3e6de;
-        #         color: #50180a;
-        #         border: 1px solid #ddad97;
-        #         border-radius: 4px;
-        #     }
-        #     QPushButton:enabled:hover {
-        #         background-color: #ddad97;
-        #         color: #50180a;
-        #     }
-        # """)
 
         self.ignore_btn = QPushButton("Ignore")
         self.ignore_btn.setObjectName("ignoreButton")
         self.ignore_btn.clicked.connect(self.ignore_pressed)
-        # self.ignore_btn.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: #d0d0d0;
-        #         color: #888888;
-        #         border: 1px solid #b0b0b0;
-        #         border-radius: 4px;
-        #         padding: 4px 8px;
-        #     }
-        #     QPushButton:enabled {
-        #         background-color: #f3f0de;
-        #         color: #4a3a0a;
-        #         border: 1px solid #ddd097;
-        #         border-radius: 4px;
-        #     }
-        #     QPushButton:enabled:hover {
-        #         background-color: #ddd097;
-        #         color: #4a3a0a;
-        #     }
-        # """)
 
         self.explorer_btn = QPushButton("Open in Explorer")
         self.explorer_btn.setObjectName("explorerButton")
-        # self.explorer_btn.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: #d0d0d0;
-        #         color: #888888;
-        #         border: 1px solid #b0b0b0;
-        #         border-radius: 4px;
-        #         padding: 4px 8px;
-        #     }
-        #     QPushButton:enabled {
-        #         background-color: #2b2b2b;
-        #         color: white;
-        #         border: 1px solid #3a3a3a;
-        #         border-radius: 4px;
-        #     }
-        #     QPushButton:enabled:hover {
-        #         background-color: #313131;
-        #         color: white;
-        #     }
-        # """)
         self.explorer_btn.clicked.connect(self.explorer_pressed)
 
         btns_row.addWidget(self.explorer_btn)
@@ -462,6 +382,8 @@ class MainWindow(QMainWindow):
         found. Shows an error dialog on failure.
         :return:
         """
+        self.report_btn.setEnabled(True)
+
         # resetting from previous scan
         self.table.setRowCount(0)
         self.issues.clear()
@@ -486,6 +408,10 @@ class MainWindow(QMainWindow):
             self.issues = result
             for issue in result:
                 self.insert_issue_row(issue.filename, issue.issue, issue.info)
+
+    def report_btn_pressed(self):
+        report_generator = ReportGenerator(None, None, None)
+        report_generator.generate()
 
     def reload_result_row(self):
         """
@@ -583,5 +509,6 @@ class MainWindow(QMainWindow):
             self.issues_solved,
             self.btn_game_ready.isChecked(),
             self.btn_source.isChecked(),
+            self.report_btn.isEnabled()
         )
         event.accept()
