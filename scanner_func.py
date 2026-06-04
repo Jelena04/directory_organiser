@@ -1,5 +1,5 @@
 import re
-
+from pathlib import Path
 import yaml, json
 import os
 import subprocess
@@ -451,3 +451,7 @@ class Issue:
         self.filepath = filepath
         self.issue = issue
         self.info = info
+
+    @property
+    def folder(self):
+        return Path(self.filepath).parent.name

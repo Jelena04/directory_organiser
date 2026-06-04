@@ -4,106 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directory Organiser Scan Report</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="C:\Users\jelen\Documents\Howest - DAE\second_year_part_2\portfolio\exam_project\B_DirectoryOrganiser\content\report_style.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Directory Organiser - Scan Report</h1>
-    <h2>Game Ready Mode &#x2022; Scanned on Thursday, June 04, 2026 at 10:33:40 &#x2022; my_config.yaml</h2>
-    <p>19 files were scanned - 10 problems were found - 0 issues were solved.</p>
-    <p>Pass rate is 53%</p>
-    <p>Issues by type:</p>
-    
-    <p>
-        <p>Folder location (3)</p>
-<div class="bar-bg">
-    <div class="bar-fill" style="--w:100%"></div>
-</div>
-        
-        <p>Image size (2)</p>
-<div class="bar-bg">
-    <div class="bar-fill" style="--w:66%"></div>
-</div>
-        
-        <p>Prefix (3)</p>
-<div class="bar-bg">
-    <div class="bar-fill" style="--w:100%"></div>
-</div>
-        
-        <p>Suffix (2)</p>
-<div class="bar-bg">
-    <div class="bar-fill" style="--w:66%"></div>
-</div>
-        
-    <table>
-        <tr>
-            <th>File</th>
-            <th>Issue</th>
-            <th>Info</th>
+    <h1 class="title">
+        Directory Organiser - Scan Report</h1>
+
+    <div class="subtitlerow">
+        <h3 class=subtitle style="text-align: left">Game Ready Mode</h3>
+        <h3>&#x2022;</h3>
+        <h3 class=subtitle style="text-align: center">Scanned on Thursday, June 04, 2026 at 10:33:40</h3>
+        <h3>&#x2022;</h3>
+        <h3 class=subtitle style="text-align: right">my_config.yaml</h3>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <div class="topcard">
+                <p style="color: var(--light-blue)">Files scanned</p>
+                <p style="font-size: 30px; color: var(--light-blue)">19</p>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="topcard">
+                <p style="color: var(--light-red)">Issues found</p>
+                <p style="font-size: 30px; color: var(--light-red)">7</p>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="topcard">
+                <p style="color: var(--light-green)">Issues solved</p>
+                <p style="font-size: 30px; color: var(--light-green)">3</p>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="topcard">
+                <p>Pass rate</p>
+                <p style="font-size: 30px">63%</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="card">
+            <p class="cardheader">Issues by type</p>
+            
+
+            
+            
+                
+            
+                
+            
+                
+            
+                
+            
+
+            
+                <p style="color: var(--issue-color-0)">Folder location (2)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:100%; --bar-color: var(--issue-color-0)"></div>
+                </div>
+            
+                <p style="color: var(--issue-color-1)">Image size (2)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:100%; --bar-color: var(--issue-color-1)"></div>
+                </div>
+            
+                <p style="color: var(--issue-color-2)">Prefix (1)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:50%; --bar-color: var(--issue-color-2)"></div>
+                </div>
+            
+                <p style="color: var(--issue-color-3)">Suffix (2)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:100%; --bar-color: var(--issue-color-3)"></div>
+                </div>
+            
+        </div>
+        <div class="card">
+            <p class="cardheader">Issues by folder</p>
+            
+            
+                <p>Meshes (2)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:40%; --bar-color: var(--issue-color-0)"></div>
+                </div>
+            
+                <p>Textures (5)</p>
+                <div class="bar-bg">
+                <div class="bar-fill" style="--w:100%; --bar-color: var(--issue-color-1)"></div>
+                </div>
+            
+        </div>
+    </div>
+
+    <table class="tablecard">
+        <tr class="tableheader">
+            <th style="width: 30%">File</th>
+            <th style="width: 20%">Issue</th>
+            <th style="width: 50%">Info</th>
         </tr>
             
-            <tr>
-                <td>ArrowSign.fbx</td>
-                <td>Prefix</td>
-                <td>No valid prefix found — expected one of: M_, SKM_, SM_, T_</td>
-            </tr>
-            
-            <tr>
-                <td>Grass01.fbx</td>
-                <td>Prefix</td>
-                <td>No valid prefix found — expected one of: M_, SKM_, SM_, T_</td>
-            </tr>
-            
-            <tr>
-                <td>SKM_Pillbug.fbx</td>
-                <td>Folder location</td>
-                <td>'SKM_' files should be in 'Meshes\Skeletal'</td>
-            </tr>
-            
-            <tr>
-                <td>SM_Mushroom02_finalmesh.fbx</td>
-                <td>Suffix</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">SM_Mushroom02_finalmesh.fbx</td>
+                <td style="color: var(--issue-color-3)">Suffix</td>
                 <td>No valid suffix found — expected one of: _BC, _M, _N, _R</td>
             </tr>
             
-            <tr>
-                <td>StatMesh_BigLeaf01.fbx</td>
-                <td>Prefix</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">StatMesh_BigLeaf01.fbx</td>
+                <td style="color: var(--issue-color-2)">Prefix</td>
                 <td>No valid prefix found — expected one of: M_, SKM_, SM_, T_</td>
             </tr>
             
-            <tr>
-                <td>SM_FullBush01.fbx</td>
-                <td>Folder location</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">SM_FullBush01.fbx</td>
+                <td style="color: var(--issue-color-0)">Folder location</td>
                 <td>'SM_' files should be in 'Meshes'</td>
             </tr>
             
-            <tr>
-                <td>SM_Grass02.fbx</td>
-                <td>Folder location</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">SM_Grass02.fbx</td>
+                <td style="color: var(--issue-color-0)">Folder location</td>
                 <td>'SM_' files should be in 'Meshes'</td>
             </tr>
             
-            <tr>
-                <td>T_Foliage_BC.png</td>
-                <td>Image size</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">T_Foliage_BC.png</td>
+                <td style="color: var(--issue-color-1)">Image size</td>
                 <td>2048x2048px is bigger than max resolution: 1024px</td>
             </tr>
             
-            <tr>
-                <td>T_Pillbug_5.png</td>
-                <td>Suffix</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">T_Pillbug_5.png</td>
+                <td style="color: var(--issue-color-3)">Suffix</td>
                 <td>No valid suffix found — expected one of: _BC, _M, _N, _R</td>
             </tr>
             
-            <tr>
-                <td>T_Pillbug_7_BC.png</td>
-                <td>Image size</td>
+            <tr class="tablerow">
+                <td style="font-family: Consolas">T_Pillbug_7_BC.png</td>
+                <td style="color: var(--issue-color-1)">Image size</td>
                 <td>2048x2048px is bigger than max resolution: 1024px</td>
             </tr>
             
     </table>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

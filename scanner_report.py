@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 import webbrowser
 
+
 class ReportGenerator:
 
     def __init__(self, issues, stats, config, date_time, mode):
@@ -18,14 +19,14 @@ class ReportGenerator:
         template = env.get_template("report_template.html")
 
         pass_rate = self.calc_pass_rate()
+
         html = template.render(date_time=self.date_time, mode=self.mode, config=self.config, stats=self.stats, pass_rate=pass_rate, issues=self.issues)
 
         with open("report_output/report.html", "w") as f:
             f.write(html)
 
     def calc_pass_rate(self):
-        print(self.stats)
-        pass_rate = round((self.stats["problems_found"]/self.stats["files_scanned"])*100)
+        pass_rate = 100-round((self.stats["problems_found"]/self.stats["files_scanned"])*100)
         return pass_rate
 
     def open(self):

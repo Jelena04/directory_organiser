@@ -1,13 +1,130 @@
+@font-face {
+    font-family: "Space Grotesk";
+    src: url(SpaceGrotesk-VariableFont_wght.ttf)
+}
+
+@font-face {
+    font-family: Inter;
+    src: url(Inter-VariableFont_opsz,wght.ttf)
+}
+
+@font-face {
+    font-family: Consolas;
+    src: url(consola.ttf)
+}
+
+:root {
+    --light-blue: #bfcbf2;
+    --light-red: #f2d4c2;
+    --light-green: #ddf2c2;
+    --dark-blue: #8696c3;
+    --bg-grey: #353433;
+    --issue-color-0: #bfcbf2;
+    --issue-color-1: #f2d4c2;
+    --issue-color-2: #ddf2c2;
+    --issue-color-3: #f2e6c2;
+    --issue-color-4: #e2c2f2;
+    --issue-color-5: #c2f2ee;
+}
+
 body {
-    background-color: #353433;
+    background-color: var(--bg-grey);
     color: white;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 15rem;
+    padding-right: 15rem;
+    font-family: "Inter";
+    font-size: 15px;
+}
+
+.title {
+    color: white;
+    font-family: "Space Grotesk";
+    font-size: 50px;
+    text-align: center;
+}
+
+.cardheader {
+    color: white;
+    font-family: "Space Grotesk";
+    font-size: 20px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.subtitle {
+    color: white;
+    font-family: "Space Grotesk";
+    font-size: 20px;
+    margin-bottom: 2rem;
+}
+
+.topcard {
+    background: #242424;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #333;
+    color: white;
+    flex: 1;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.card {
+    background: #242424;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #333;
+    color: white;
+    flex: 1;
 }
 
 .bar-bg {
-    background:#ddd;
-    width:200px; }
+    background: #4a4a4a;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 20px;
+}
 
 .bar-fill {
-    background:#e05;
-    height:20px;
-    width: var(--w); }
+    background: var(--bar-color);
+    height: 20px;
+    width: var(--w);
+    border-radius: 4px;
+}
+
+.tablecard {
+    background: #242424;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #333;
+    color: white;
+    flex: 1;
+    width: 100%;
+}
+
+.tableheader {
+    text-align: left;
+    height: 30px;
+}
+
+.tablerow {
+    height: 30px;
+}
+
+.row {
+    display: flex;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.subtitlerow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+  flex: 1;
+
+}
