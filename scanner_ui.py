@@ -314,9 +314,9 @@ class MainWindow(QMainWindow):
             msg.setWindowTitle("Error loading config")
             msg.setText(error)
             msg.exec()
-        self.scanner.config = None
-        self.btn_game_ready.setChecked(True)
-        self.btn_source.setChecked(False)
+        # self.scanner.config = None
+        # self.btn_game_ready.setChecked(True)
+        # self.btn_source.setChecked(False)
 
     def insert_issue_row(self, filename, issue, info):
         """
@@ -399,6 +399,9 @@ class MainWindow(QMainWindow):
             nr_files, result, self.date_time = self.scanner.scan(self.directory_to_scan.text(), "game_ready")
         elif self.btn_source.isChecked():
             nr_files, result, self.date_time = self.scanner.scan(self.directory_to_scan.text(), "source")
+        elif not self.btn_game_ready.isChecked() and not self.btn_source.isChecked():
+            QMessageBox.warning(None, "Please choose a mode to run the scan in.")
+            return
 
         if type(result) == str:
             QMessageBox.warning(None, "Error reading file path", result)

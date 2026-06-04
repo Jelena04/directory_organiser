@@ -1,12 +1,13 @@
 game_ready:
   folders:
     M_: Materials
-    SKM_: Meshes\Skeletal
-    SM_: Meshes
+    SKM_: SkeletalMeshes
+    SM_: StaticMeshes
     T_: Textures
   naming:
     prefixes:
       material: M_
+      physics_material: PM_
       skeletal_mesh: SKM_
       static_mesh: SM_
       texture: T_
@@ -18,14 +19,17 @@ game_ready:
       normal: _N
       roughness: _R
   textures:
-    max_resolution: 1024
-    require_power_of_two: true
+    max_resolution: 2048
+    require_power_of_two: false
   allowed_formats:
     - .png
     - .tga
     - .fbx
     - .abc
     - .wav
+    - .meta
+    - .mat
+    - .physicMaterial
   max_file_size_mb: 50
 source:
   naming:

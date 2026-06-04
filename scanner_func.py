@@ -87,9 +87,9 @@ class Scanner:
         preconditions aren't met.
         """
         if directory == "":
-            return 0, "Please enter a directory to scan"
+            return 0, "Please enter a directory to scan", None
         if not os.path.exists(directory):
-            return 0, "Given directory to scan doesn't exist"
+            return 0, "Given directory to scan doesn't exist", None
 
         if self.config_path is None:
             return 0, "Please enter a config file path"
@@ -110,6 +110,7 @@ class Scanner:
                 ext_issue = self.check_extension(file, allowed_formats, root)
                 if ext_issue:
                     issues.append(ext_issue)
+                    continue
 
                 size_issue = self.check_file_size(file, root, mode)
                 if size_issue:
@@ -184,14 +185,18 @@ class Scanner:
         """
         basename = os.path.splitext(file)[0]
 
+        # Check if this file's prefix is one that doesn't require a suffix
+        prefix_map = self.config["game_ready"]["naming"]["prefixes"]
+        suffix_map = self.config["game_ready"]["naming"]["suffixes"]
+
+        for prefix_name, prefix_value in prefix_map.items():
+            if basename.startswith(prefix_value):
+                # If this prefix type has no suffix defined, skip the check
+                if suffix_map.get(prefix_name) is None:
+                    return None
+
         if any(basename.endswith(suffix) for suffix in self.correct_suffixes):
             return None
-
-        if self.empty_suffix_allowed:
-            # Strip whatever prefix-shaped chunk is at the start (valid or not)
-            stem = re.sub(r"^[A-Za-z]+_", "", basename)
-            if not re.search(r"_[A-Za-z0-9]+$", stem):
-                return None
 
         return Issue(file, os.path.join(root, file),"Suffix",f"No valid suffix found — expected one of: {', '.join(self.correct_suffixes)}")
 
@@ -228,7 +233,8 @@ class Scanner:
 
         for prefix, expected_folder in folder_map.items():
             if file.startswith(prefix):
-                if not root.endswith(expected_folder):
+                root_path = Path(root)
+                if expected_folder not in root_path.parts:
                     return Issue(file, os.path.join(root, file), "Folder location",
                                  f"'{prefix}' files should be in '{expected_folder}'")
         return None

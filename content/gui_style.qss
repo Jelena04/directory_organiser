@@ -55,14 +55,14 @@
 }
 
 #reportButton:enabled {
-    background-color: #d0d0d0;
+    background-color: #8998c7;
     color: black;
     border: 1px solid #3a3a3a;
     border-radius: 4px;
 }
 
 #reportButton:enabled:hover {
-    background-color: #bbbbbb;
+    background-color: #727ea6;
     color: black;
 }
 
