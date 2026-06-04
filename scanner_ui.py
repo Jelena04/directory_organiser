@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(main_container)
         main_layout.setContentsMargins(20, 20, 20, 20)
 
-        with open("content/styles.qss", "r") as f:
+        with open("content/gui_style.qss", "r") as f:
             self.setStyleSheet(f.read())
 
         # to scan row

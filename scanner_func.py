@@ -315,7 +315,8 @@ class Scanner:
 
             if not ok or not new_name:
                 return False
-            if not any(new_name.startswith(prefix) for prefix in known_prefixes):
+            fake_filename = new_name + extension
+            if self.check_prefix(fake_filename, dir):
                 QMessageBox.warning(None, "Wrong prefix",
                                     f"{new_name} does not have an allowed prefix. Allowed prefixes: {', '.join(known_prefixes)}")
                 return self.rename_file(issue)
@@ -325,7 +326,8 @@ class Scanner:
 
             if not ok or not new_name:
                 return False
-            if not any(new_name.endswith(suffix) for suffix in known_suffixes):
+            fake_filename = new_name + extension
+            if self.check_suffix(fake_filename, dir):
                 QMessageBox.warning(None, "Wrong suffix",
                                     f"{new_name} does not have an allowed suffix. Allowed suffixes: {', '.join(known_suffixes)}")
                 return self.rename_file(issue)
