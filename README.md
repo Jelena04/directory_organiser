@@ -4,14 +4,14 @@ A PySide6-based GUI application for scanning and organizing directories accordin
 
 ## Features
 
-- 📁 **Recursive directory scanning** — Walk through all subdirectories and check every file
-- 🎮 **Multiple scanning modes** — "Game-ready" and "Source" asset validation
-- 🏷️ **Flexible naming rules** — Prefix/suffix checking, regex pattern matching, banned words detection
-- 🖼️ **Image validation** — Power-of-two dimensions and resolution limits
-- 📊 **Issue tracking** — Table view of all found issues with details
-- 🔧 **Quick fixes** — Rename, move, delete, or ignore files directly from the UI
-- 💾 **State persistence** — Automatically saves and restores your last session
-- 🌓 **Dark/Light theme support** — Fusion-based UI with custom styling
+- **Recursive directory scanning** — Walk through all subdirectories and check every file
+- **Multiple scanning modes** — "Game-ready" and "Source" asset validation
+- **Flexible naming rules** — Prefix/suffix checking, regex pattern matching, banned words detection
+- **Image validation** — Power-of-two dimensions and resolution limits
+- **Issue tracking** — Table view of all found issues with details
+- **Quick fixes** — Rename, move, delete, or ignore files directly from the UI
+- **State persistence** — Automatically saves and restores your last session
+- **Dark/Light theme support** — Fusion-based UI with custom styling
 
 ## Requirements
 
